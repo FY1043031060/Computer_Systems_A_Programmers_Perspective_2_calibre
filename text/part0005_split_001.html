@@ -1,0 +1,6585 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>未知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Assume initially that %dh</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movb %dh<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&gt;</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ %al</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movsbl %dh,%eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movzbl %dh,%eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">例子中都是将寄存器</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">％eax</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的低位字节设置成</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">％edx</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的第二个字节。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">movb</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">指令不改变其他 三个字节。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">艮据源字节的最高位</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，movsbl</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">指令将其他三个字节设为全</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">或全</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">0。movzbl</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">指令 无论如何都是将其他三个字节设为全</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">.最后两个数据传送操作可以将数据压入程序栈中，以及从程序栈中弹出数据。正如我们将看 到的，栈在处理过程调用中起到至关重要的作用。栈是一个数据结构,可以添加或者删除值，不 过要遵循“后进先出”的原则。通过操作把数据压入栈中，通过/70/7操作删除数据；它具 有一个属性：弹出的值永远是最近被压入而仍然在桟中的值。栈可以实现为一个数组，总是从数 组的一端插入和删除元素。这一端称为栈顶。在IA32中，程序栈存放在存储器中某个区域。如 图3-5所示，栈向下增长，这样一来，栈顶元素的地址是所有栈中元素地址中最低的。（根据惯 例，我们的栈是倒过来画的，栈顶”在图的底部。）栈指针％esp保存着栈顶元素的地址。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">最初</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%esp</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pushl %eax</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%esp</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x104</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">popl %edx</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%esp</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">栈“底”</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">找“底”</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">桟“底”</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">籲</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">J:::::',:</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">栈“顶”</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x104</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x123</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">栈“顶”</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">栈“顶” _</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">图3-5栈操作说明。根据惯例，我们的栈是倒过来画的，因而栈“顶”在底部。IA32的栈向低地址 方向增长，所以压栈是减小栈指针（寄存器％6叩）的值，并将数据存放到存储器中，而出栈 是从存储器中读，并增加找指针的值</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">址大</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">地增</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">pushl指令的功能是把数据压入到栈上，而popl指令是弹出数据。这些指令都只有一个 操作数一~压入的数据源和弹出的数据目的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">将一个双字值压入栈中，首先要将找指针减4,然后将值写到新的栈顶地址。因此，指令 pushl %ebp的行为等价于以下两条指令：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">subl $4,%esp movl %ebp,(%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Decrement stack pointer Store %ebp on stack</span>
+</b>
+</i>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它们之间的区别是在目标代码中pushl指令编码为1个字节，而上面两条指令一共需要6个字</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<a href="http://www.TopSage.com">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre16">
+<span class="calibre14">www.TopSage.com</span>
+</span>
+</b>
+</span>
+</a>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">节。图3-5中前两栏所示的是，当％63?为0x108, %eax为0x123时，执行指令pushl %eax 的效果。首先％esp会减4,得到0x104，然后会将0x123存放到存储器地址0x104处。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">弹出一个双字的操作包括从栈顶位置读出数据，然后将栈指针加4。因此，指令popl %eax等价于以下这两条指令：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl (%esp) ,°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax addl $4,%esp</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Read %ea.x from stack Increment stack pointer</span>
+</b>
+</i>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-5的第三栏说明的是在执行完pushl后立即执行指令popl %edx的效果。先从存储 器中读出值0x123，再写到寄存器％edx中，然后，寄存器％esp的值将增加回到0x108。如 图所示，值0x123仍然会保持在存储器位置0x104中，直到被覆盖（例如被另一条入栈操作覆 盖)。无论如何，％es<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 指向的地址总是栈顶。任何存储在栈顶之外的数据都被认为是无效的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">因为栈和程序代码以及其他形式的_序数据都是放在同样的存储器中，所以程序可以用标 准的存储器寻址方法访问栈内任意位置。例如，假设栈顶元素是双字，指#</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">111(^1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">4(%esp), ^办会将第二个双字从栈中复制到寄存器<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">％</span>
+</tt>
+</small>
+</sub>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">edx</span>
+</tt>
+</small>
+</sub>
+ 。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题3.2对于下面汇编代码的每一行，根据操作数，确定适当的指令后缀。（例如，mov可以被重 写成 movb、movw 或者 movl。）</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mov</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, (%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mov</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%eax), %dx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mov</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$0xFF, %bl</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mov</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%esp,%edx,4), %dh</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">push</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$0xFF</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mov</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%dx, (%eax)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pop</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edi</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">@练习题3.3当我们调用汇编器的时候，下面代码的每一行都会产生一个错误消息。解释每一行都是 哪里出了错。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movb</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$0xF, (%bl)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%ax, (%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movw (%eax),4(%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">A</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movb</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%ah,%sh</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax,$0x123</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax,%dx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movb</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%si, 8(%ebp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3.4.3数据传送示例</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">作为一个使用数据传送指令的代码示例,考虑图3-6中所示的数据交换函数，既有C代码， 也有GCC产生的汇编代码。我们省略了一部分汇编代码</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这些代码用来在程序入口处为运行时 栈分配空间，以及在过程返回前回收栈空间的代码。当我们讨论过程链接时，会讲到这种建立和 完成代码的细节。除此之外剩下的代码，我们称之为“过程体”（body)。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1 int exchange(int *xp, int y)</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">xp at %ebp-f-8, y at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%ebp+12</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2 {</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1 movl 8(%ebp), °/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+</small>
+</sub>
+ edx</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Get xp</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int x = *xp;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">By copying to</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7«eax</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">below, x becomes the return value</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2 movl (%edx), %eax</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Get x at xp</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5 *xp = y;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3 movl 12(%ebp), %ecx</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Get y</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">return x;</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4 movl %ecx, (%edx)</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Store y at xp</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">a) C语言代码</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">b)汇编代码</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-6 exchange函数体的C语言和汇编代码。省略了栈的建立和完成部分</span>
+</tt>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">给C语言初学者：一些指针的示例</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">函数exchange (图3-6)提供了一个关于C语言中指针使用的很好说明。参数xp是一个 指向整数的指针，而y是一个整数。语句</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">int x = *xp;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">表示我们将读存储在xp所指位置中的值，并将它存放到名字为X的局部变量中。这个读操作称 为指针的间接引用（dereferencing), C操作符*执行指针的间接引用。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">语句</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">*xp = y;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">正好相反——它将参数y的值写到xp所指的位置。这也是一种指针间接引用的形式（所以有操 作符*)，但是它表明的是一个写操作，因为它是在赋值语句的左边。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">下面是一个调用exchange的实际例子：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">int a = 4;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">int b = exchange(&amp;a, 3); printf("a = %d, b = %d\n"</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">a, b);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这段代码会打印出：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">a = 3, b = 4</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">C操作符&amp; (称为“取址”操作符）创建一个指针</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">在本例中，该指针指向保存局部变量a的位 置。然后，函数exchange将用3覆盖存储在a中的值，但是返回4作为函数的值。注意如何 将指针传递给exchange,它能修改存在某个远处位置的数据。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">当过程体开始执行时，过程参数xp和y存储在相对于寄存器％eb<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 中地址值偏移8和12 的地方。指令1和2从存储器当中读出参数xp,把它存放到寄存器％edx中。指令2使用寄 存器％edx,并将x读到寄存器％eax中，直接实现了 C程序中的操作x=*x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 。稍后，用寄存 器％63&lt;从这个函数返回一个值，因而返回值就是X</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">指令3将参数y加载到寄存器％ecx。然 后，指令4将这个值写入到寄存器％60^中的xp指向的存储器位置，直接实现了操作*x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ =y。 这个例子说明了如何用MOV指令从存储器中读值到寄存器（指令1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">〜<sub class="calibre29">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</small>
+</sub>
+</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">),如何从寄存器写到 存储器（指令4)。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">关于这段汇编代码有两点值得注意。首先，我们看到C语言中所谓的“指针”其实就是地 址。间接引用指针就是该指针放在一个寄存器中，然后在存储器引用中使用这个寄存器。其 次，像x这样的局部变量通常是保存在寄存器中，而不是存储器中。寄存器访问比存储器访问 要快得多。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题3.4假设变量v*<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 被声明为类型</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">src_t v; dest_t *p;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这里src_t和dest_t是用typedef声明的数据类型。我们想使用适当的数据传送指令来实现下面 的操作</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*p = (dest_t) v;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">此处，V存储在寄存器％eax适当命名的部分中（也就是％63%、％3乂或％31)，而指针p存储在寄存 器％edx中。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">对于下列</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">src_t</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">dest_t</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">的组合，写一行汇编代码进行适当的数据传送。记住，在</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">C</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">语言 中，当执行既涉及大小变化又涉及符号改变的强制类型转换时,操作应该先改变符号（参见 2.2.6 节）。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">src_t</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">dest_t</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">指令</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">char ch ar</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unsigned</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">char</span>
+</i>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unsigned</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unsigned</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unsigned</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">char</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unsigned char int</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">movl %eax, (%edx)</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题3.5巳知信息如下。将一个原型为 void decode1(int *xp, int *yp, int *zp);</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的函数编译成汇编代码。代码体如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">xp at</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">yp at</span>
+</i>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%ebp+12,</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">zp at %ebp+16</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(%ebp),</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edi</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp), %edx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp), %ecx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%edx), %ebx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%ecx)，°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ esi</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%edi), %eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, (°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ edx)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Xebx, (%ecx)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/iesi, (%edi)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">参数xp、yp和zp分别存储在相对于寄存器％6bp中地址值的偏移8、12和16的地方。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">请写出与以上汇编代码的decodel等效的C代码。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">3.5</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">算术和逻辑操作</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-7列出了一些整数和逻辑操作。大多数操作都分成了指令类</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这些指令类有各种带不同 大小操作数的变种。（只有leal没有其他大小的变种。）例如，指令类ADD由三条加法指令组 成：addb、addw和addl,分别是字节加法、字加法和双字加法。事实上，给出的每个指令类 都有对字节、字和双字数据进行操作的指令。这些操作被分为四组：加载有效地址、一元操作、 二元操作和移位。二元操作有两个操作数，而一元操作有一个操作数。这些操作数的描述方法与 3.4节中所讲的一样。</span>
+</tt>
+</p>
+<span id="filepos0001330693"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">加载有效地址</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">加载有效地址（load effective address)指令leal实际上是movl指令的变形。它的指令形 式是从存储器读数据到寄存器，但实际上它根本就没有引用存储器。它的第一个操作数看上去是 一个存储器引用，但该指令并不是从指定的位置读入数据，而是将有效地址写入到目的操作数。 在图3-7中我们用C语言的地址操作符&amp;S说明这种计算。这条指令可以为后面的存储器引用产 生指针。另外，它还可以简洁地描述普通的算术操作。例如，如果寄存器％edx的值为<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">X</span>
+</tt>
+</small>
+</sub>
+ ,那么 指令leal 7 (%edx, %edx, 4) , %eax将设置寄存器％eax的值为<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</small>
+</sup>
+ x + 7。编译器经常发现一些</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">leal的灵活用法，根本与有效地址计算无关。目的操作数必须是一个寄存器。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">leal</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S, D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">描述 加载有效地址</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1 1负补 加减取取</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00035.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">INC</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">DEC</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">NEG</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">NOT</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">加减乘异或与</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">D^-D + S</span>
+</i>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">D — D- S D ^ D* S D —D — S D&lt;-D\ S D &lt;r— D Sc S</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">ADD</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5,</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">SUB</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">S, D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">IMUL</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">S, D</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">xor</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5,</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">or</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">，D</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">AND</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">，D</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">左移</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">左移（等同于SAL) 算术右移 逻辑右移</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">D — D«k D</span>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">一</span>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">D«k D</span>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">&lt;~</span>
+</i>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+ <i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+ <i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">D ^</span>
+</i>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">一</span>
+</b>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">D</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SAL</span>
+</b>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">k, D</span>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SHL</span>
+</b>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">k，D</span>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SAR</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">k, D</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SHR</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">k, D</span>
+</i>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-7整数算术操作。加载有效地址（leal)指令通常用来执行简单的算术操作。其余的指令是 非常标准的一元或二元操作。我们用&gt;&gt;<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">A</span>
+</tt>
+</small>
+</sub>
+ 和来分别表示算术右移和逻辑右移。注意，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这里的操作数顺序与ATT格式的汇编代码中的相反</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">练习题3.6假设寄存器％eax的值为x, %ecx的值为y。填写下表，指明下面每条汇编代码指令存 储在寄存器％edx中的值：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">指 令</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">结 果</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal 6(%eax),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal (%eax,%ecx),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal (%eax,</span>
+</b>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%ecx,</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal 7(%eax,%eax,8),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal OxA(,%eax,4),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">leal 9(%eax,%ecx,2),%edx</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">一元操作和二元操作</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">第二组中的操作是一元操作，它只有一个操作数，既是源又是目的。这个操作数可以是一 个寄存器，也可以是一个存储器位置。比如说，指令incl(%esp)会使栈顶的4字节元素加1。 这种语法让人想起C语言中的加1运算符(HH-)和减1运算法（--)。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">第三组是二元操作，其中，第二个操作数既是源又是目的。这种语法让人想起C语言中 的赋值运算符，例如x+=y。不过，要注意，源操作数是第一个，目的操作数是第二个，对于 不可交换操作来说，这看上去很奇特。例如，指令subl %eax，％edx使寄存器％edx的值减 去％eax中的值。.(将指令解读成“从％edx中减去％eax”会有所帮助。）第一个操作数可以是 立即数、寄存器或是存储器位置。第二个操作数可以是寄存器或是存储器位置。不过,同movl 指令一样,两个操作数不能同时是存储器位置。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">_练习题</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">3.7假设下面的值存放在指定的存储器地址和寄存器中：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">地址</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">值</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x100</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x104</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x108</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">OxlOC</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">OxFF</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">OxAB</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x13</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x11</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">寄存器</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">值</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%ecx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x100</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0x3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">填写下表，给出下面指令的效果，说明将被更新的寄存器或存储器位置，以及得到的值。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">指令</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">目的</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">值</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">addl %ecx, (%eax)</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">subl %edx,4(%eax)</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">imull $16, (%eax,%edx,4)</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">incl 8(%eax)</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">decl °/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ ecx</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">subl %edx, %eax</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<span id="filepos0001346367"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">移位操作</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">最后一组是移位操作，先给出移位量，然后第二项给出的是要移位的位数。它可以进行算术 和逻辑右移。移位量用单个字节编码，因为只允许进行0到31位的移位（只考虑移位量的低5 位)。移位量可以是一个立即数，或者放在单字节寄存器元素％cl中。（这些指令很特别，因为 只允许以这个特定的寄存器作为操作数。）如图3-7所示，左移指令有两个名字：SAL和SHL。 两者的效果是一样的，都是将右边填上0。右移指令不同，SAR执行算术移位（填上符号位), 而SHR执行逻辑移位（填上0)。移位操作的目的操作数可以是一个寄存器或是一个存储器位 置。图3-7中用&gt;&gt;<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">A</span>
+</tt>
+</small>
+</sub>
+ (算术）和&gt;\ (逻辑）来表示这两种不同的右移运算。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">练习题</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">3.8假设我们想生成以下C函数的汇编代码：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int shift_left2_rightn(int x, int n)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">x «= 2; x &gt;&gt;= n; return x;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">} •</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">下面这段汇编代码执行实际的移位，并将最后的结果放在寄存器％eax中。此处省略了两条关键的指 令。参数x和n分别存放在存储器中相对于寄存器％ebp中地址偏移8和12的地方。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl 8(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp), %eax</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Get x</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl 12(%ebp), %ecx</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Get n</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">根据右边的注释，填出缺失的指令。请使用算术右移操作。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">讨论</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们看到图3-7所示的大多数指令，既可以用于无符号运算，也可以用于补码运算。只有右 移操作要求区分有符号和无符号操作数。这个特性使得补码运算成为实现有符号整数运算的一种 比较好的方法。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-8给出了一个执行算术操作的函数示例，以及它的汇编代码。和前面一样，我们省略了 栈的建立和完成部分。函数参数x、y和z分别存放在存储器中相对于寄存器％ebp中地址偏移</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">f at °/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp+6,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">y</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">at %ebp+i2.,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">z</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">at %ebp-fi</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16(%ebp), %eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">z</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">leal</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%eax,7<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax,2),</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">z*3</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sail</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$4, %eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">t2</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">z*48</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp) , %edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">addl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp) , <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ /<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ edx</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">ti</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x+y</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">andl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">$65535, %edx</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">t3</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">tUOxFFFF</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">7</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">imull</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx, %eax</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">Return t4 - t2*t3</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">a) C语言代码</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">b)汇编代码</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre10">
+<tt class="calibre3">
+<span class="calibre4">图3-8算术运算函数体的C语言和汇编代码。省略了栈的建立和完成部分</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">8、12和16的地方。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">arith (int x,</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">int y,</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">int z)</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">tl = x+y;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">t2 = z*48;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<i class="calibre15">
+<span class="calibre4">1</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">t3 =</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">tl</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">&amp; OxFFFF;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">t4 = t2 * t3;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">9</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">return t4;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">10</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">汇编代码指令与C语言源代码中的顺序不同。指令2和3用leal和移位指令的组合来实 现表达式zM8。第5行计算x+y的值。第6行计算tl和OxFFFF的AND值。指令7执行最 后的乘法。由于乘法的目的寄存器是％eax,函数会返回这个值。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-8的汇编代码中，寄存器％eax中的值先后对应于程序值z、3*z、zM8和t4 (作为 返回值)。通常，编译器产生的代码中，会用一个寄存器存放多个程序值，还会在寄存器之间传 送程序值。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</small>
+</sup>
+ .<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</small>
+</sup>
+ 图3-8a中函数有以下变种，有些表达式用空格替代：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1 int arith(int x,</span>
+</b>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int y,</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">A</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">_</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">r</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int z)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">I</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">tl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t2</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t3</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">B</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t4</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">二</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t4;</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">io &gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">实现这些表达式对应的汇编代码如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre10">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">at %ebp+S,</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y at 7<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ ebp+12<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">f</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ z at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%ebp+i</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(%ebp),</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">xorl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(%ebp), °/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sari</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$3, %eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">notl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">subl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp),</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">基于这些汇编代码，填写C语言代码中缺失的部分。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题3.10常常可以看见以下形式的汇编代码行：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">xorl %edx,%edx</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">但是在产生这段汇编代码的C代码中，并没有出现EXCLUSIVE-OR操作。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">解释这条特殊的EXCLUSIVE-OR指令的效果，它实现了什么有用的操作。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">更直接表达这个操作的汇编代码是什么？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">比较一下同样一个操作的两种不同实现的编码字节长度。 3.5.5特殊的算术操作</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-9描述的指令支持产生两个32位数字的全64位乘积以及整数除法。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">指令</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">效果</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">描述</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">imull</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">mull</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R[%edx]:R[%eax]</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">S x</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">R[°/Jeax] R[%edx]:R[%eax] —</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">S</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">x R[%eax]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">有符号全64位乘法 无辟全64位乘法</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">cltd</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R[%edx]:R[%eax] SignExtend(R[°/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ eax])</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">转为四字</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">idivl</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R[%edx] — R[%edx]:R[7<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ eax] mod</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S\</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">R[%eax] — R[°/oedx]:R[<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sup>
+ /<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ eax] +</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">有符号除法</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">divl</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R[%edx] — R[%edx]:R[%eax] mod</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S;</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">R[%eax] — R[%edx]:R[%eax] +</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">无符号除法</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-9特殊的算术操作。这些操作提供了有符号和无符号数的全64位乘法和除法。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">一对寄存器％edx和％eax组成一个64位的四字</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图3-7中列出的imull指令称为“双操作数”乘法指令。它从两个32位操作数产生一个 32位乘积,实现了 2.3.4节和2.3.5节中描述的操作*<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</small>
+</sub>
+ <sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">U</span>
+</tt>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ 和*/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ 。回想一下,将乘积截取为32位 时，无符号乘和补码乘的位级行为是一样的。IA32还提供了两个不同的“单操作数”乘法指令，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">以计算两个32位值的全64位乘积</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">个是无符号数乘法（mull)，而另一个是补码乘法</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(imull)。这两条指令都要求一个参数必须在寄存器％eax中，而另一个作为指令的源操作数给 出。然后乘积存放在寄存器％edx (高32位）和％^% (低32位）中。虽然imull这个名字可 以用于两个不同的乘法操作，但是汇编器能够通过计算操作数的数目，分辨出想用哪条指令。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">举个例子，假设有符号数x和y存储在相对于％ebp偏移量为8和12的位置，我们希望将 它们的全64位乘积作为8个字节存放在栈顶。代码如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x at y^ebpt-S, y at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%ebp+12</span>
+</b>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(°/,ebp), %eax</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Put y in</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ea:c</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">imull</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(%ebp)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Multiply by x</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%eax, (%esp)</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Store low-order</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">32 bits</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">.</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%edx, 4(%esp)</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Store high-oirder 32</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">bits</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">可以观察到，存储两个寄存器的位置对小端法机器来说是对的——寄存器％edx中的高位存 放在相对于％eax中的低位偏移量为4的地方。栈是向低地址方向增长的，也雜是说低位在栈顶。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们前面的算术运算表（图3-7)没有列出除法或模操作。这些操作由#似于单操作数乘法 指令的单操作数除法指令提供。有符号除法指令idivl将寄存器％ed<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">X</span>
+</tt>
+</small>
+</sub>
+ (高32位）和％eax (低 32位）中的64位数作为被除数，而除数作为指令的操作数给出。指令将商存储在寄存器％eax 中，将余数存储在寄存器％edx中。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">举个例子，假设有符号数x和y存储在相对于％ebp偏移量为8和12的位置，我们想要将 x/y和x%y存储到栈中。GCC产生的代码如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%ebp+S,</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%ebp+i2</span>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp) , %edx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Put x in</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%edx</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx, %eax</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Copy x to</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%eax</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sari</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">$31, %edx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Sign extend x</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">in %edx</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">idivl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(%ebp)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Divide by y</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, 4(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ esp)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Store x / y</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx, (%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Store x X y</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">第1行的传送指令和第3行的算术移位指令联合起来的效果，就是根据x的符号将寄存 器％edx设置为全零或者全一；而第2行的传送指令将x复制到％eax。因此，我们有了将靑存 器％edx和％eax联合起来存放x的64位符号扩展的版本。在idivl指令之后，商和余数&amp;复 制到栈顶的两个位置（指令5和6)。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">设置除数更常规的方法是使用cltd<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">e</span>
+</tt>
+</small>
+</sup>
+ 指令。这条指令将％eax符号扩展到％edx。使用这 条指令，上面所示的代码序列变成了以下形式：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x at %ehp^8, y at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">12</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Load x into</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%eax</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Sign extend into</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%edx</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Divide by y Store x / y Store x % y</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(%ebp) ,°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ eax</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">cltd</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">idivl 12(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp) movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, 4(%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx, (%esp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们可以看到，这里的前两条指令与前面代码序列中的前三条指令有一样的整体效果。不同 的GCC版本会产生这两种不同的方式来设置整数除法的被除数。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">无符号除法使用的是divl指令。通常会事先将寄存器%edx设置为0。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3.11</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">修改有符号除法的汇编代码，使它计算数</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">x</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">的无符号商和余数，并将结果存放在栈上。 ®练习题</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3.12</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">考虑下面的</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">C</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">函数原型，其中，</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">num</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">是用</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">typedef</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">声明的数据类型。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void store_prod(num_t *dest, unsigned x, num_t y) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest = x*y;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">GCC产生以下汇编代码来实现计算的主体:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">dest</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">at %ebp+5</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">，x at</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">%ebp+i2,</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y at %ebpf-16</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12(<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ /<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp) , %eax</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">20(%ebp), %ecx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">imull</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, %ecx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">mull</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16(°/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ ebp)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">leal</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%ecx,%edx), %edx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8(%ebp), %ecx</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%eax, (%ecx)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">movl</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">%edx, 4(%ecx)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">可以看到，这段代码需要读两次内存来取参数y (第2行和第4行），两个乘法（第3行和第4行）, 以及两次内存写来存储结果（第7行和第8行)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">num_t是什么数据类型的？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">描述用来计算乘积的算法，并证明它是正确的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">3.6</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">控制</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">到目前为止，我们只考虑了直线代码的行为，也就是指令一条接着一条顺序地执行。c语言 中的某些结构，比如条件语句、循环语句和分支语句，要求有条件的执行，根据数据测试的结果 来决定操作执行的顺序。机器代码提供两种基本的低级机制来实现有条件的行为：测试数据值， 然后根据测试的结果来改变控制流或者数据流。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">数据相关的控制流是实现有条件行为的更通用和更常见的方法，所以我们先来介绍它。通 常，c语言中的语句和机器代码中的指令都是按照它们在程序中出现的次序，顺序执行的。用</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">㊀在Intel的文档里，这条指令称为cdq。这是指令的ATT格式名字与Intel名字无关的少数情况之一。</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">jump</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">指令可以改变一组机器代码指令的执行顺序，jump指令指定控制应该被传递到程序的哪个 其他部分，可能是依赖于某个测试的结果。编译器必须产生指令序列，这些指令序列构建在这种 实现C语言控制结构的低级机制之上。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">本文会先涉及机器级机制，然后说明如何用它们来实现C语言的各种控制结构。之后，我 们会回来介绍使用有条件的数据传输来实现与数据相关的行为。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3.6.1条件码</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">除了整数寄存器，CPU还维护着一组单个位的条件码（condition code)寄存器，它们描 述了最近的算术或逻辑操作的属性。可以检测这些寄存器来执行条件分支指令。最常用的条 件码有：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">CF:进位标志。最近的操作使最高位产生了进位。可以用来检査无符号操作数的溢出。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">ZF ：零标志。最近的操作得出的结果为0。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">SF ：符号标志。最近的操作得到的结果为负数。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">OF:溢出标志。最近的操作导致一个补码溢出——正溢出或负溢出。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">比如说，假设我们用一条ADD指令完成等价于C表达式t-a+b的功能，这里变量a、b和 t都是整型的。然后，根据下面的C表达式来设置条件码：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">CF:</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(unsigned) t &lt; (unsigned) a</span>
+</tt>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">无符号溢出</span>
+</tt>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">ZF:</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(t == 0)</span>
+</tt>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">零</span>
+</tt>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">SF:</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(t &lt; 0)</span>
+</tt>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">负数</span>
+</tt>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">OF:</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(a &lt; 0 == b &lt; 0) &amp;&amp; (t &lt; 0 !=</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">a &lt; 0)</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">有符号溢出</span>
+</tt>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">leal指令不改变任何条件码，因为它是用来进行地址计算的。除此之外，图3-7中列出的 所有指令都会设置条件码。对于逻辑操作，例如XOR,进位标志和溢出标志会设置成0。对于 移位操作，进位标志将设置为最后一个被移出的位，而溢出标志设置为0。INC和DEC指令会 设置溢出和零标志，但是不会改变进位标志，至于原因，我们就不在这里深入探讨了。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">除了图3-7中的指令会设置条件码，有两类指令（有8、16和32位形式），它们只设置条 件码而不改变任何其他寄存器；如图3-10所示。CMP指令根据它们的两个操作数之差来设置条 件码。除了只设置条件码而不更新目标寄存器之外，CMP指令与SUB指令的行为是一样的。在 ATT格式中，列出操作数的顺序是相反的，这使代码有点难读。如果两个操作数相等，这些指 令会将零标志设置为1,而其他的标志可以用来确定两个操作数之间的大小关系。TEST指令的 行为与AND指令一样，除了它们只设置条件码而改变目的寄存器的值。典型的用法是，两个操 作数是一样的（例如，testl %eax，％e#用来检查％^\是负数、零，还是正数)，或其中的 一个操作数是一个掩码，用来指示哪些位应该被测试。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">指令</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">基于</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">描述</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">CMP</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">S<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">S<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">1</span>
+</i>
+</small>
+</sub>
+</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">比较</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">cmpb</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Compare byte</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">cmpw</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Compare word</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">cmpl</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Compare double word</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">TEST</span>
+</b>
+</tt>
+</span>
+ <i class="calibre15">
+<span class="calibre4">S<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Si</span>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">&amp;</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5*2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">测试</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">testb</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Test byte</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">testw</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Test word</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">testl</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Test double word</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre27">
+<tt class="calibre3">
+<span class="calibre4">图3-10比较和测试指令。这些指令不修改任何寄存器的值，只设置条件码</span>
+</tt>
+ <a href="http://www.TopSage.com">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre16">
+<span class="calibre14">www.TopSage.com</span>
+</span>
+</b>
+</span>
+</a>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+</body>
+</html>

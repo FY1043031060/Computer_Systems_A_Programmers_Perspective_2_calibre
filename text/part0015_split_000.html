@@ -1,0 +1,5977 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>未知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">|第5章|</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<span class="calibre4">| Computer Systems</span>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">：</span>
+</tt>
+</span>
+ <span class="calibre12">
+<span class="calibre4">A Programmer’s Perspective, 2E</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">优化程序性能</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">你能获得的对程序最大的加速比就是 当你第一次让它工作起来的时候。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">John K.Ousterhout</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">写程序最主要的目标就是使它在所有可能的情况下都正确工作。一个运行得很快但是给出错 误结果的程序没有任何用处。程序员必须写出清晰简洁的代码，这样做不仅是为了程序员能够看 懂代码，也是为了在检査代码和今后需要修改代码时，其他人能够读懂和理解代码。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">另一方面，在很多情况下，让程序运行得快也是一个重要的考虑因素。如果一个程序要实时 地处理视频帧或者网络包，一个运行得很慢的程序就不能提供所需的功能。当一个计算任务的 计算量非常大，需要执行数日或者数周，那么哪怕只是让它运行得快20%也会产生重大的影响。 本章会探讨如何使用几种不同类型的程序优化技术，使程序运行得更快。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">编写高效程序需要几类活动：第一，我们必须选择一组合适的算法和数据结构。第二，我们 必须编写出编译器能够有效优化以转换成高效可执行代码的源代码。对于第二点，理解优化编译 器的能力和局限性是很重要的。编写程序方式中看上去只是一点小小的变动，都会引起编译器优 化方式很大的变化。有些编程语言比其他语言容易优化得多。C语言的有些特性，例如执行指针 运算和强制类型转换的能力，使得编译器很难对它进行优化。程序员经常能够以一种使编译器更 容易产生高效代码的方式来编写他们的程序。第三项技术针对处理运算量特别大的计算，将一个 任务分成多个部分，这些部分可以在多核和多处理器的某种组合上并行地计算。我们会把这种性 能改进的方法推迟到第12章去讲。即使是要利用并行性，每个并行的线程都以最高性能执行也 是非常重要的</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">所以无论如何本章所讲的内容也还是相关的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在程序开发和优化的过程中</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">我们必须考虑代码使用的方式，以及影响它的关键因素。通 常，程序员必须在实现和维护程序的简单性与它的运行速度之间做出权衡。在算法级上，几分钟 就能编写一个简单的插入排序，而一个高效的排序算法程序可能需要一天或更长的时间来实现和 优化。在代码级上，许多低级别的优化往往会降低程序的可读性和模块性，使得程序容易出错， 并且更难以修改或扩展。对于在性能重要的环境中反复执行的代码</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">进行广泛的优化比较合适。 一个挑战就是尽管做了广泛的变化</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">但还是要维护代码一定程度的简洁和可读性。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们描述许多提高代码性能的技术。理想的情况是</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">编译器能够接受我们编写的任何代码， 并产生尽可能高效的、具有指定行为的机器级程序。现代编译器釆用了复杂的分析和优化形式， 而且变得越来越好。然而，即使是最好的编译器也受到妨</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">碍优化的因素</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（optimization blocker) 的阻碍，妨碍优化的因素就是程序行为中那些严重依赖于执行环境的方面。程序员必须编写容易 优化的代码，以帮助编译器。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">程序优化的第一步就是消除不必要的内容，让代码尽可能有效地执行它期望的工作。这包括 消除不必要的函数调用、条件测试和存储器引用。这些优化不依赖于目标机器的任何具体属性。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了使程序性能最大化，程序员和编译器都需要一个目标机器的模型，指明如何处理指令， 以及各个操作的时序特性。例如，编译器必须知道时序信息，才能够确定是用一条乘法指令，还 是用移位和加法的某种组合。现代计算机用复杂的技术来处理机器级程序，并行地执行许多指 令，执行顺序还可能不同于它们在程序中出现的顺序。程序员必须理解这些处理器是如何工作 的，从而调整他们的程序以获得最大的速度。基于Intel和AMD处理器最近的设计，我们提出</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">了一个这种机器的高级模型。我们还设计了一种图形数据流（data-flow)表示法，可以使处理器 对指令的执行形象化，我们还可以利用它预测程序的性能。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">了解了处理器的运作，我们就可以进行程序优化的第二步，利用处理器提供</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的指令级并行</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(instruction-level parallelism)能力，同时执行多条指令。我们会讲述几个对程序的变化，降低一 个计算不同部分之间的数据相关，增加并行度，这样就可以同时执行这些部分了。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们以对优化大型程序的问题的讨论来结束这一章。我们描述了代码剖</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">析程序</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（profiler)的 使用，代码剖析程序是测量程序各个部分性能的工具。这种分析能够帮助找到代码中低效率的 地方，并且确定程序中应该着重优化的部分。最后，是一个重要的观察结论称为Amdahl</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">定律</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(Amdahl’s law),它量化了对系统某个部分进行优化所带来的整体效果。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在本章的描述中，我们使代码优化看起来像按照某种特殊顺序，对代码进行一系列转换的简 单线性过程。实际上，这项工作远非这么简单。需要相当多的试错法试验。当我们进行到后面的 优化阶段时，尤其是这样，到那时，看上去很小的变化会导致性能上很大的变化。相反，一些看 上去很有希望的技术被证明是无效的。正如后面的例子中会看到的那样，要确切解释为什么某段 代码序列有某个延迟，是很困难的。性能可能依赖于处理器设计的许多详细特性，而对此我们所 知甚少。这也是我们尝试各种技术的变形和组合的另一个原因。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">研究程序的汇编代码表示，是理解编译器，以及产生的代码如何运行的最有效的手段之一。 仔细研究内循环的代码是一个很好的开端，确认降低性能的属性，例如过多的存储器引用和对寄 存器使用不当。从汇编代码开始，还可以预测什么操作会并行执行，以及它们会如何使用处理器 资源。正如我们会看到的，常常通过确认关键路径(critical path)来决定执行一个循环所需要的 时间（或者说，至少是一个时间下界)。所谓关键路径是在循环的反复执行过程中形成的数据相 关链。然后，我们会回过头来修改源代码，试着控制编译器使之产生更有效率的实现。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">大多数编译器，包括GCC，一直都在更新和改进，特别是在优化能力方面。一个很有用的 策略是只重写程序到编译器由此就能产生有效代码所需要的程度就好了。这样，能尽量避免损害 代码的可读性、模块性和可移植性，就好像我们使用的是具有最低能力的编译器。同样地，通过 测量值和检查生成的汇编代码，反复修改源代码和分析它的性能是很有帮助的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于新手程序员来说，不断修改源代码，试图欺骗编译器产生有效的代码，看起来很奇怪, 但这确实是编写很多高性能程序的方式。比较于另一种方法——用汇编语言写代码，这种间接的 方法具有的优点是：虽然性能不一定是最好的，但得到的代码仍然能够在其他机器上运行。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.1</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">优化编译器的能力和局限性</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">现代编译器运用复杂精细的算法来确定一个程序中计算的是什么值，以及它们是被如何使用 的。然后它们会利用一些机会来简化表达式，在几个不同的地方使用同一个计算，以及降低一个 给定的计算必须被执行的次数。大多数编译器，包括GCC,向用户提供了一些对它们所使用的 优化的控制。就像在第3章中讨论过的，最简单的控制就是制</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">订优化级别。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">例如，以命令行标志 ‘-01’调用GCC是让GCC使用一组基本的优化。在网络旁注ASM:OPT中讨论过的，以标志 ‘-02’或‘-03’调用GCC会让它使用更全面的优化。这样做可以进一步提高程序的性能，但 是也可能增加程序的规模，也可能使标准的调试工具更难对程序进行调试。我们的表述，虽然对 于大多数GCC用户来说，优化级别2已经成为了被接受的标准，•但是还是主要考虑以优化级别 1编译出的代码。我们特意限制了优化级别，以展示写C语言函数的不同方法如何影响编译器产 生代码的效率。我们会发现可以写出的C代码，即使用优化等级1编译得到的性能，也比用可 能的更高优化等级编译一个更初级的版本得到的性能好。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">编译器必须很小心地对程序只使用</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">安全的</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">优化，也就是说对于程序可能遇到的所有可能的情</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">况，在C语言标准提供的保证之下，优化后得到的程序和未优化的版本有一样的行为。限制编 译器只进行安全的优化，消除了一些造成不希望的运行时行为的可能原因，但是这也意味着程序 员必须花费更大的力气写出程序使编译器能够将之转换成有效机器代码。为了理解决定一种程序 转换是否安全的难度，让我们来看看下面这两个过程：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void twiddleKint *xp, int *yp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-C</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*xp += *yp;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*xp += *yp;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void twiddle2(int *xp, int *yp)</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">s {</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">9</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*xp</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+=</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*yp;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">.!() &gt;</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">乍一看，这两个过程似乎有相同的行为。它们都是将存储在由指针yp指示的位置处的值两 次加到指针x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 指示的位置处的值。另一方面，函数twiddle2效率更高一些。它只要求3次存 储器引用（读*xp,读*yp,写*xp),而twiddlel需要6次（2次读*xp, 2次读*yp, 2次 写*即)。因此，如果要编译器编译过程twiddlel,我们会认为基于twiddle2执行的计算能 产生更有效的代码。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">不过，考虑xp等于yp的情况。此时，函数twiddlel会执行下面的计算：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Double value at xp</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp;</span>
+</b>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*■</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Double value at xp</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">木</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">结果是xp的值会增加4倍。另一方面，函数twiddle2会执行下面的计算：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2*</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*xp;</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Triple value at</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">xp</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">结果是<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">X</span>
+</tt>
+</small>
+</sub>
+ p的值会增加3倍。编译器不知道twiddlel会如何被调用，因此它必须假设参数x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 和yp可能会相等。因此，它不能产生twiddle2风格的代码作为twiddlel的优化版本。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这种两个指针可能指向同一个存储器位置的情况称为存</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">储器别名使用</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（memory aliasing)。 在只执行安全的优化中，编译器必须假设不同的指针可能会指向存储器中同一个位置。再看一个 例子，对于一个使用指针变量P和q的程序，考虑下面的代码序列：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">x = 1000; y = 3000;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*q = y;</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* 3000</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*p = x;</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">/* 1000 */</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">tl = *q;</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* 1000 or 3000</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">tl的计算值依赖于指针p和q是否指向存储器中同一个位置——如果不是，tl就等于 3000,但如果是，tl就等于1000。这造成了一个主要的妨</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">碍优化的因素，，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这也是可能严重限制 编译器产生优化代码机会的程序的一个方面。如果编译器不能确定两个指针是否指向同一个位 置，就必须假设什么情况都有可能，限制了可能的优化策略。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">5.1下面的问题说明了存储器别名使用，可能会导致意想不到的程序行为的方式。考虑下面 这个交换两个值的过程：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/&gt; Swap value x at xp with value y at yp */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">void swap(int *xp, int *yp)</span>
+</b>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*xp =</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">=*xp H</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">卜</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">*yp;</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">h.</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;：<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">H</span>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">i- y *</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">*yp</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">=*xp -</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-*yp;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">h</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-xh</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">f-y-y ~ y; *</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*xp =</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">=*xp -</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-*yp;</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/'卞</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">xh</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">- y</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果调用这个过程时xp等于yp,会有什么样的效果？</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">第二个妨碍优化的因素是函数调用。作为一个示例</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">考虑下面这两个过程</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int f();</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">:i</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int funclO {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return f() + f() + f() + f();</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int func2() {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return 4*f();</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">最初看+去两个过程计算的都是相同的结果</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">但是fimc2只调用f 1次，而funcl调用f4 次。以fund作为源时，会很想产生fimc2风格的代码。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">不过，考虑下面f的代码：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1 int counter = 0;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int f() {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return counter++;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&gt;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个函数有个</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">副作用</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">——它修改了全局程序状态的一部分。改变调用它的次数会改变 程序的行为。特别地</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">假设开始时全局变量counter都设置为0,对funcl的调用会返回 0+1+2+3=6,而对func2的调用会返回4 • 0=0。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">大多数编译器不会试图判断一个函数是否没有副作用，因此任意函数都可能是优化的候选 者，例如fum<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">C</span>
+</tt>
+</small>
+</sub>
+ 2中的做法。相反，编译器会假设最糟的情况，并保持所有的函数调用不变。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">用内联函数替换优化函数调用</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">如网络旁注</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">ASMDPT</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">描述的</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">包含兩数调用的代码可以用一个称为内联兩数替换</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（inline substitution,</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">或者简称</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">“</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">内联</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">”</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(inlining))</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的过程进行优化，此时，将函数调用替换为函数体。 例如，我们可以通过替换掉对函数</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">f</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">次调用</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">展开</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">funcl</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的代码</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Result of inlining f in funcl */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int funclinO {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int t = counter++;</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+0</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t += counter++;</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+1</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t += counter++;</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+2</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t += counter++;</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+3</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return t;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">这样的转换既减少了函数调用的开销，也允许对展开的代码做进一步优化。例如，编译器可 以统一</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">funclin</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">中对全局变量</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">counter</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的更新</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">产生这个函数的一个优化版本</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Optiffiization of inlined code</span>
+</b>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">木</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int funcloptO {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int t = 4 * counter + 6;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">counter = t + 4;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return t;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于这个特定的函数f的定义，上述代码忠实地重现了 funcl的行为。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">GCC的最近版本会尝试进行这种形式的优化，要么是被用命令行选项“-finline”指示时， 要么是使用优化等级2或者更高的等级时。由于在我们的描述中只考虑优化等级1,所以我们假 设编译器不会执行内联函数替换。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在各种编译器中，就优化能力来说，GCC被认为是胜任的，但是并不是特别突出。它完成 基本的优化，但是它不会对程序进行更加“有进取心的”编译器所做的那种激进变换。因此， 使用GCC的程序员必须花费更多的精力，以一种简化编译器生成高效代码的任务的方式来编 写程序。</span>
+</tt>
+</p>
+<span id="filepos0003594338"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.2</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">表示程序性能</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们引入度量标准每元素的周期数（Cycles Per Element, CPE),作为一种表示程序性能并 指导我们改进代码的方法。CPE这种度量标准帮助我们在更详细的级别上理解迭代程序的循环 性能。这样的度量标准对执行重复计算的程序来说是很适当的，例如处理图像中的像素，或是计 算矩阵乘积中的元素。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">处理器活动的顺序是由时钟控制的，时钟提供了某个频率的规律信号，通常用千兆赫 兹（GHz),即十亿周期每秒来表示。例如，当表明一个系统有“4 GHz”处理器，这表示处理 器时钟运行频率为4X10<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</small>
+</sup>
+ 千兆赫玆。每个时钟周期的时间是时钟频率的倒数。通常是用纳秒 (nanosecond, 1纳秒等于10_<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</small>
+</sup>
+ 秒）或皮秒（picosecond, 1皮秒等于10_<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</small>
+</sup>
+ 秒）来表示的。例如， 一个4 GHz的时钟其周期为0.25纳秒，或者说250皮秒。从程序员的角度来看</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">用时钟周期来 表示度量标准要比用纳秒或皮秒来表示有帮助得多。用时钟周期来表示，度量值表示的是执行了 多少条指令，而不是时钟运行得有多快。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">许多过程含有在一组元素上迭代的循环。例如，图5-1中的函数psuml和<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ sum2计算 的都是一个长度为《的向量的</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">前置和</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（prefix sum)。对于向量2 =〈冲，“]，…，前置和</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">P</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">(Po，</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">Pi，• • •，定义为</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Po=ci<sub class="calibre29">
+<small class="calibre8">
+<span class="calibre30">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">PrPi-&amp;<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">a</span>
+</i>
+</tt>
+</small>
+</sup>
+ n I &lt; i &lt; n</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">(5-1)</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">函数psuml每次迭代计算结果向量的一个元素。第二个函数使用循环展开（loop unrolling) 的技术</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">每次迭代计算两个元素。本章的后面我们会探讨循环展开的好处。关于分析和优化前置 和计算的内容请参见练习题5.11、5.12和家庭作业5.21。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这样一个过程所需要的时间可以用一个常数加上一个与被处理元素个数成正比的因子来描 述。例如，图5-2是这两个函数需要的周期数关于《的取值范围图。使用最小二乘方拟合（least squares fit),我们发现，psuml和psum2的运行时间（用时钟周期为单位）分别近似于等式 496+10.0«和500+6.5^这两个等式表明对代码计时和初始化过程、准备循环以及完成过程的开 销为496〜500个周期加上每个元素6.5或10.0周期的线性因子。对于较大的”值（比如说大于 200),运行时间就会主要由线性因子来决定。这些项中的系数称为每元素的周期数（CPE)的有 效数。注意，我们更愿意用每个元素的周期数而不是每次循环的周期数来度量，这是因为像循环 展开这样的技术使得我们能够用较少的循环完成计算，而我们最终关心的是，对于给定的向量长 度，程序运行的速度如何。我们将精力集中在减小计算的CPE上。根据这种度量标准，psum2 的 CPE 为 6.5,优于 CPE 为 10.0 的 psuml<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Compute prefix sum of vector a */</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">T.</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void psuml (float a[], float p[],</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">J-</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int n)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">\</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int i;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[0] = a</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[0];</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 1; i</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&lt;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">n; i++)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[i]</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">p[i-l] + a[i];</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">10</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void psum2(float a[], float</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">p[]</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">,</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int n)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">11</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int i;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">13</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[0] = a[0];</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">14</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 1; i &lt; n-1; i+:2) -C</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">float mid_val = p[i-l] +</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">a[i];</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">16</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[i] = mid.val;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">17</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[i+l] = mid_val + a[i+l];</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">18</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&gt;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">19</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">木</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">For odd</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">n, finish remaining</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">element</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">20</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (i</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">&lt;</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">n)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">21</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[i]</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">p[i</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-1] + a[i];</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">22</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">&gt;</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-1前置和函数。这是关于我们如何表示程序性能的示例</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00098.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">元素</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-2前置和函数的性能。两条线的斜率表明每元素的周期数（CPE)</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">什么是最小二乘方拟合</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">对于一个数据点</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">(<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">Xl</span>
+</b>
+</span>
+</small>
+</sub>
+ , ^), ...,</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(x<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">n</span>
+</b>
+</i>
+</tt>
+</span>
+</small>
+</sub>
+ ,</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的集合，我们常常试图画一条线，它能最接近于这些 数据代表的</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">X-Y</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">趋势。使用最小二乘方拟合，寻找一条形如</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">;;= w;c + 6</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的线，使得下面这个误 差度量最小：</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">E(m, b)</span>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">= ^</span>
+</i>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">(mxi -\-b — yi)<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">2</span>
+</i>
+</small>
+</sup>
+</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">i=l,n</span>
+</b>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">将五</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">(w, zo</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">分别对</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">m</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">求导，把两个导数函数设置为</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0,</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">进行推导就能得出计算</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的算法。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题5.2在本章后面，我们会从一个函数开始，生成许多不同的变种，这些变种保持函数的行为, 又具有不同的性能特性。对于其中三个变种，我们发现运行时间</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">（以时</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">钟周期为单位</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">）可以用</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">下面的 函数近似地估计：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">版本 1: 60 + 35«</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">版本 2: 136+ 4«</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">版本</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">3: 157 + 1.25«</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">每个版本在《取什么值时是三个版本中最快的？记住，《总是整数。</span>
+</tt>
+</p>
+<span id="filepos0003612622"></span>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.3</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">程序示例</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了说明一个抽象的程序是如何被系统地转换成更有效的代码的，考虑图5-3所示的简单向 量数据结构。向量由两个存储器块表示：头部和数据数组。头部是一个声明如下的结构：</span>
+</tt>
+</p>
+<p height="0pt" width="5em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.h</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Create abstract data type for vector */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">typedef struct {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int len;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data_t *data;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">} vec_rec, *vec_ptr;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="5em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">            </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.h</span>
+</b>
+</i>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">len</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">len</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td colspan="3" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">len</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">—1</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">纖猶</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">uU</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">二</span>
+</i>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-3向量的抽象数据类型。向量由头信息加上指定长度的数组来表示</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个声明用数据类型data_t作为基本元素的数据类型。在我们的评价中，度量代码对于 整数（C语言的int)、单精度&amp;点数（C语言的float)和双精度浮点数（C语言的double) 数据的性能。为此，我们会分别为不同的类型声明编译和运行程序，就像下面这个例子对数据类 型int —样：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">typedef int data一t;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们还会分配一个len个data一t类型对象的数组，来存放实际的向量元素。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-4给出的是一些生成向量、^问向量元素以及确定向量长度的基本过程。一个值得注意 的重要特性是get一vec_element,向量访问程序，它会对每个向量引用进行边界检查。这段 代码类似于许多其^语言（包括Java)所使用的数组表示法。边界检查降低了程序出错的概率, 但是它也会减缓程序的执行。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">作为一个优化示例，考虑图5-5中所示的代码，它根据某种运算，将一个向量中所有的元素 合并成一个值。通过使用编译时常数IDENT和0P的不同定义，这段代码可以重编译成对数据 执行不同的运算。特别地，使用声明：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define IDENT 0 #define OP +</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它对向量的元素求和。使用声明：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define IDENT 1 #define OP *</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Create vector of specified length */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">vec^ptr new_vec(long int len)</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">A</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">6</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">7</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">20</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">21</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">22</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">23</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">24</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">25</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">26</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">27</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">28</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">29</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">30</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">y\</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">32</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">33</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">34</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">35</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">36</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">37</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">38</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">39</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Allocate</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">header structure */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">vec_ptr result = (vec^ptr) malloc(sizeof(vec_rec)); if (!result)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return NULL; /* Couldn't allocate storage */ result-&gt;len = len;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Allocate array */</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (len &gt; 0) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data_t *data = (data_t *)calloc(len, sizeof(data_t)); if (!data) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">free((void *) result);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return NULL</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">;卜</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Couldn't, allocate storage 氺/</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">result-&gt;data = data;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">else</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">result-〉data = NULL; return result;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Retrieve vector element and store at dest.</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Return 0 (out of bounds) or 1 (successful)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">*/</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int get_vec_element(vec_ptr v, long int index, data_t *dest)</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">if (index &lt; 0 I I index &gt;= v-&gt;len) return 0;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">♦dest = v-&gt;data[index]; return 1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Return length of vector</span>
+</b>
+</span>
+ <span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">long int vec_length(vec_ptr v)</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">return v-&gt;len;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">■</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图5-4向量抽象数据类型的实现。在实际程序中，数据类型data一t被声明为int、float或double</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/氺</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Implementation with maximum use of data abstraction */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void combinel(vec_ptr v, data_t *dest)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">、</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">A</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">IDENT</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; vec_length(v); i++) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">s</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data_t val;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">get_vec_element(v, i,</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&amp;val);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest</span>
+</b>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">= *dest OP val;。</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">n</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">.12</span>
+</span>
+ <b class="calibre13">
+<span class="calibre4">}</span>
+</b>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图5-5合并运算的初始实现。使用标识元素工DENT和合并运算OP的不同声明，我们可以测量 该函数对不同运算的性能</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它计算的是向量元素的乘积。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在我们的讲述中，会对这段代码进行一系列的变化，写出这个合并函数的不同版本。为了衡 量进步，我们会在一个拥有Intel Core i7处理器的机器上测量这些函数的CPE性能，这个机器称 为参考机。3.1节中给出了一些有关这个处理器的特性。这些测量值刻画的是程序在某个特定的 机器上的性能，所以在其他机器和编译器组合上不保证有同等的性能。不过，我们把这些结果与 许多不同编译器/处理器组合上的结果做了比较，发现也非常相似。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们会进行一组变换，发现有很多只能带来很小的性能提高，而其他的能带来更巨大的效 果。确定该使用哪些变换的组合确实是编写快速代码的“魔术”（black art)。有些不能提供可测 量的好处的组合确实是无效的，然而有些组合是很重要的，它们使编译器能够进一步优化。根据 我们的经验，最好的方法是实验加上分析：反复地尝试不同的方法，进行测量，并检查汇编代码 表示以确定底层的性能瓶颈。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">作为一个起点，下面是combinel的CPE度量值，它运行在我们的参考机上，尝试了数据 类型和合并运算的所有组合。对于单精度和双精度浮点数据，在参考机上的实验表明对于加法， 它们的性能相同，但是对于乘法，性能不同。因此，报告五个CPE值：整数加法和乘法、浮点 加法、单精度乘法（标号为“F*”）和双精度乘法（标号为“D*”)。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">页码</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">方法</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">整数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">浮点数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+ *</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+ F* D*</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combinel</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">331</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">抽象的未优化的</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">20.02 29.21</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">27.40 27.90 27.36</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combinel</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">331</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">抽象的-01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.00 12.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.00 12.01 13.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">可以看到测量值有些不太精确。对于整数求和，以及乘积的CPE数更像是29.00,而 不是29.02或29.21。我们不会“捏造”数据让它们看起来好看一点儿，只是给出了实际获 得的测量值。有很多因素会使得可靠地测量某段代码序列需要的精确周期数这个任务变得 复杂。检査这些数字时，在头脑里把结果向上或者向下取整几百分之一个时钟周期会很有 帮助。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">未经优化的代码是从C语言代码到机器代码的直接翻译，通常有明显的低效率。简单 地使用命令行选项‘-01’，就会进行一些基本的优化。正如可以看到的，程序员不需要 做什么，就会显著地提高程序性能——超过两个数量级。通常，养成至少使用这个级别 优化的习惯是很好的。剩下的测试，使用级别1和更高级别的优化来生成和测量我们的 程序。</span>
+</tt>
+</p>
+<span id="filepos0003634236"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.4</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">消除循环的低效率</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">可以观察到，过程combinel调用函数vec_length作为for循环的测试条件，如图5-5 所示。回想关于如何将含有循环的代码翻译成机^级程序的讨论（见3.6.5节),每次循环迭代时 都必须对测试条件求值。另一方面，向量的长度并不会随着循环的进行而改变。因此，只需计算 一次向量的长度，然后在我们的测试条件中都使用这个值。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-6是一个修改了的版本，称为combine2,它在开始时调用vec一length,并将结果 赋值给局部变量length。对于某些数据类型和操作，这个变换明显地影响了程序性能，对于其 他的情况，只有很小甚至没有影响。无论是哪种情况，都需要这种变换来消除这个低效率，这有 可能成为尝试进一步优化时的瓶颈。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Move call to vec„length out of- loop */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void combine2(vec_ptr v, data_t *dest)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int length</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">= vec_length(v);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">6</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest = IDENT;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (1 = 0; i &lt; length; i++) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data_t val;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<span class="calibre4">get_vec_element(v, i,</span>
+</span>
+ <span class="calibre12">
+<span class="calibre4">      </span>
+</span>
+ <span class="calibre12">
+<span class="calibre4">&amp;val);</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest = *dest OP val;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-6改进循环测试的效率。通过把对vec一length的调用移出循环测试，我们不再需要每次 迭代时都执行这个函数</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">页码</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">方法</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">整数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="3" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">浮点数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">F*</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">D*</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combinel</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">331</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">抽象的-01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">13.00</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combine2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">333</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">移动 vec_length</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8.03</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">10.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">11.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.08</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个优化是一类常见的优化的一个例子，称为代码移动（codemotion)。这类优化包括识别 要执行多次（例如在循环里）但是计算结果不会改变的计算。因而可以将计算移动到代码前面不 会被多次求值的部分。在本例中，我们将对vec_length的调用从循环内部移动到循环的前面。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">优化编译器会试着进行代码移动。不幸的是，就像前面讨论过的那样，对于会改变在哪里调 用函数或调用多少次的变换，编译器通常会非常小心。它们不能可靠地发现一个函数是否会有副 作用，因而假设函数会有副作用。例如，如果vec一length有某种副作用，那么combinel和 <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">CO</span>
+</tt>
+</small>
+</sub>
+ mbine2可能就会有不同的行为。为了改进代码，程序员必须经常帮助编译器显式地完成代 码的移动。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">举一个combinel中看到的循环低效率的极端例子，考虑图5-7中所示的过程lowerl。这 个过程模仿几个学生的函数设计，他们的函数是作为一个网络编程项目的一部分交上来的。这个 过程的目的是将一个字符串中所有大写字母转换成小写字母。这个大小写转换是将‘A’到‘Z’ 范围内的字符转换成‘a’到‘z’范围内的字符。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对库函数strlen的调用是lowerl循环测试的一部分。虽然strlen通常是用特殊的 x86字符串处理指令来实现的，但是它的整体执行也类似于图5-7中给出的这个简单版本。因为 C语言中的字符串是以mill结尾的字符序列，strlen必须一步一步地检査这个序列，直到遇 到null字符。对于一个长度为《的字符串，strlen所用的时间与《成正比。因为对lowerl 的</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">n</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">次迭代的每一次都会调用strlen,所以lowerl的整体运行时间是字符串长度的二次项, 正比于《<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sup>
+ 。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如图5-8所示（使用strlen的库版本)，这个函数对各种长度的字符串的实际测量值证实 了上述分析。lowerl的运行时间曲线图随着字符串长度的增加上升得很陡峭（图5-8a)。图5-8b 展示了 7个不同长度字符串的运行时间（与曲线图中所示的有所不同），每个长度都是2的幂数。 可以观察到，对于lowerl来说，字符串长度每增加一倍，运行时间都会变为原来的4倍。这 很明显地表明运行时间是二次的。对于一个长度为1 048 576的字符串来说</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">lowerl需要超过 13分钟的CPU时间。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Convert string to</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">lowercase:</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">slow</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void lowerl(chax *s)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int i;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; strlen(s); i++)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">if (s5i]</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">'A'</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&amp;&amp;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">s[i]</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&lt;=丨Z<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</small>
+</sup>
+ )</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">s[i] -=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">('A'</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">- 'a');</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">10</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Convert string to</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">lowercase:</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">faster</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">void lower2(ch2Lr *s)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-C</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">M</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">int len = strlen(s);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">■16</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">for (i =. 0; i &lt; len; i++)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">if (s[i]</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">&gt;:</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">'A'</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">&amp;&amp;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">s[i]</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">&lt;=</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">'Z')</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">s[i] -=</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">('A'</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">- 'a');</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">21</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/*. Sample implementation of library</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">function strlen */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/* Compute length of</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">string */</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">size_t strlen(const char *s)</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int length = 0;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">while (*s != '\0')</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">{</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">S</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">++；</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">length++;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return length;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-7小写字母转换函数。两个过程的性能差别很大</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">除了把对strlen的调用移出了循环以外，图5-7中所示的lower2与lowerl是一样的。 这样一来，性能有了显著改善。对于一个长度为1 048 576的字符串，这个函数只需要1.5毫 秒——比lowerl快了 500 000多倍。字符串长度每增加一倍，运行时间也会增加一倍——很显 然运行时间是线性的。对于更长的字符串，运行时间的改进会更大。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在理想的世界里，编译器会认出循环测试中对strlen的每次调用都会返回相同的结果, 因此应该能够把这个调用移出循环。这需要非常成熟完善的分析，因为strlen会检查字符串 的元素，而随着lowerl的进行，这些值会改变。编译器需要探査，即使字符串中的字符发生 了改变，但是没有字符会从非零变为零，或是反过来，从零变为非零。即使是使用内联函数，这 样的分析也远远超出了最成熟完善的编译器的能力，所以程序员必须自己进行这样的变换。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个示例说明了编程时一个常见的问题，一个看上去无足轻重的代码片断有隐藏的渐近低效 率（asymptotic inefficiency)。人们可不希望一个小写字母转换函数成为程序性能的限制因素。通 常，会在小数据集上测试和分析程序，对此，lowerl的性能是足够的。不过，当程序最终部署 好以后，过程完全可能被应用到一个有100万个字符的串上。突然，这段无危险的代码变成了一 个主要的性能瓶颈。相比较而言，lowed的性能对于任意长度的字符串来说都是足够的。大型 编程项目中出现这样问题的故事比比皆是。一个有经验的程序员工作的一部分就是避免引人这样</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00099.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">字符串长度</span>
+</b>
+</tt>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">字符串长度</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16 384</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">32 768</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">65 536</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">131 072 262 144</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">524 288</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1 048 576</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">lowerl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">lower2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.19</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.0000</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.77</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.0000</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3.08</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.0001</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.34 49.39 0.0002 0.0004</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">198.42</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.0008</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">791.22</span>
+</b>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0.0015</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的渐近低效率。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">b)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图5-8小写字母转换函数的性能比较。由于循环结构的效率比较低，初始代码lowerl的运行时间是2 次项的。修改过的代码lower2的运行时间是线性的</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题5.3考虑下面的函数：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int min(int x, int y) { return x &lt; y ? x int max(int x, int y) { return x &lt; y ? y void incr(int *xp, int v) { *xp += v; &gt; int square(int x) { return x*x; }</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">下面三个代码片断调用这些函数</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">A.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">max(x, y); incr(&amp;i, 1)) i &gt;= min(x, y); incr(&amp;i, -1))</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = min(x, y); i &lt; t += square(i);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = max(x, y) - 1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">t += square(i);</span>
+</b>
+</tt>
+</span>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int low = min(x, y); int high = max(x, y);</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</blockquote>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = low; i &lt; high; incr(&amp;i, 1)) t += square(i);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">假设x等于10,而y等于100。填写下表，指出在代码片断A〜C中4个函数每个被调用的 次数：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">代码</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">min</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">max</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">incr</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">square</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">A.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">B.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">C.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.5</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">减少过程调用</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">像我们看到的那样，过程调用会带来相当大的开销，而且妨碍大多数形式的程序优化。从 combine2的代码（见图5-6)中可以看出，每次循环迭代都会调用get_vec一element来获 取下一个向量元素。对每个向量引用，这个函数要把向量索引i与循环^界做比较，很明显会 造成低效率。在处理任意的数组访问时，边界检查可能</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">是个很</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">有用的特性，但是对<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">CO</span>
+</tt>
+</small>
+</sub>
+ mbin<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">e</span>
+</tt>
+</small>
+</sub>
+ 2 代码的简单分析表明所有的引用都是合法的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">作为替代，假设为我们的抽象数据类型增加一个函数get一vec_start。这个函数返回数 组的起始地址，如图5-9所示。然后就能写出此图中<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">CO</span>
+</tt>
+</small>
+</sub>
+ mbine3所示的过程，其中的循环里没 有函数调用。它没有用函数调用来获取每个向量元素，而是直接访问数组。一个纯粹主义者可能 会说这种变换严重损害了程序的模块性。原则上来说，向量抽象数据类型的使用者甚至不应该需 要知道向量的内容是作为数组来存储的，而不是作为诸如链表之类的某种其他数据结构来存储 的。比较实际的程序员会争论说这种变换是获得高性能结果的必要步骤。</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">data_t *get_vec_stcirt (vec_ptr v)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-C</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return v-&gt;data;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/opt/vec.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">.</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/* Direct access to vector data</span>
+</b>
+</span>
+ <span class="calibre2">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void combine3(vec_ptr v, data_t *dest)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">6</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">10</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">11</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">12</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">long int length = vec_length(v); data_t *data = get_vec_start(v);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">♦dest = IDENT;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; length; i++) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*dest = *dest OP data[i];</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图5-9消除循环中的函数调用。得到的代码运行速度快得多，这是以损害一些程序的模块性为代价的</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">页码</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td rowspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">方法</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">整数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="3" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">浮点数</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">本</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">F*</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D*</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combine2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">333</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">移动 vec_length</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8.03</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">10.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">11.09</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.08</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">combine3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">336</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">直接数据访问</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6.01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8.01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">10.01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">11.01</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12.02</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">得到的性能提高出乎意料的普通，只提高了整数求和的性能。不过同样地，这样的低效率会 成为试图进一步优化的瓶颈。我们还会再回到这个函数（见5.11.2节)，看看为什么<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">CO</span>
+</tt>
+</small>
+</sub>
+ mbine2 中反复的边界检查不会让性能更差。对于性能至关重要的应用来说，为了速度，经常必须要损害 一些模块性和抽象性。为了防止以后要修改代码，添加一些文档是很明智的，说明釆用了哪些变 换以及导致进行这些变换的假设。</span>
+</tt>
+</p>
+<span id="filepos0003671959"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<span class="calibre4">5.6</span>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">消除不必要的存储器引用</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">combines的代码将合并运算计算的值累积在指针dest指定的位置。通过检查编译出来</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的循环产生的汇编代码，可以看出这个属性。在此给出数据类型为float,合并运算为乘法的</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">X86-64</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">代码：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">3d:SSSQ*a*</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">Jle^roovlvdp bii2n<sup class="calibre31">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<span class="calibre4">fl</span>
+</tt>
+</span>
+</small>
+</sup>
+ /49momumoadcmJg</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">.2 L</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">data„t</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">= float, OP</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">=本</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">,data in</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%rax,</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">dest in</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">%rbp</span>
+</b>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%rbp) , <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ /oxmmO</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">'</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(%rax,%rdx,4), %xmmO °/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ xmmO, (%rbp)</span>
+</b>
+</tt>
+</span>
+</p>
+</body>
+</html>

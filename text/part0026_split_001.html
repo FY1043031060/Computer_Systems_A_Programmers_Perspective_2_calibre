@@ -1,0 +1,6821 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>未知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">clientfd = Socket(AF.INET, SOCK</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">STREAM, 0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">其中，AFJNET表明我们正在使用因特网，而SOCK一STREAM表示这个套接字是因特网连接的 一个端点。socket返回的clientfd描述符仅是部分打开的，还不能用于读写。如何完成打 开套接字的工作，取决于我们是客户端还是服务器。下一节描述当我们是客户端时如何完成打开 套接字的工作。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">connect</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">客户端通过调用connect函数来建立和服务器的连接。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include &lt;sys/socket.h&gt;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0,</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">若出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">connect函数试图与套接字地址为serv_addr的服务器建立一个因特网连接，其中 addrlen是sizeof (sockaddr一in)。connect函数会阻塞，一直到连接成功建立或是发生 错误。如果成功，sockfd描述符现i就准备好可以读写了，并且得到的连接是由套接字对</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">(x:y, serv_addr.sin_addr:serv_addr.sin_port)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">刻画的，其中X表示客户端的IP地址，而y表示临时端口，它唯一地确定了客户端主机上的客 户端进程。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">open—client fd</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们发现将socket和connect函数包装成一</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">个叫做</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">open一clientfd的辅助函数是很 方便的，客户端可以用它来和服务器建立连接。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int open_clientfd(char *hostname, int port);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为描述符，若</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Unix</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，若</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">DNS</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">open_clientfd函数和运行在主机hostname上的服务器建立一个连接，并在知名端口 port上监听连接请求。它返回一个打开的套接字描述符，该描述符准备好了，可以用Unix I/O 函数做输入和输出。图11-16给出了 open_clientfd的代码。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">~：</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int open_clientfd(char *hostname, int port)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2 {</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int clientfd;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">struct hostent *hp;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">struct sockaddr_in serveraddr;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">if ((clientfd = socket(AF.INET, SOCK.STREAM, 0)) &lt; 0)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">return</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-1;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Check</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">errno for cause of error */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Fill in the server's IP address</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">and port */</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">ri</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">((hp = gethostbyname(hostname))</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">== NULL)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">return</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-2;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Check</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">h„errno for cause of error */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">bzero((char</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*) ftserveraddr, sizeof(serveraddr));</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serveraddr.sin_family = AF_INET;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">bcopy((char</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*)hp-&gt;h_addr一list[0],</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(char</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*)&amp;serveraddr•sin_addr.s_addr, hp-&gt;h_length);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serveraddr.sin_port</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">= htons(port);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">18</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Establish a connection with the</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">server</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(connect(clientfd, (SA *) &amp;serveraddr, sizeof(serveraddr)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return clientfd;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">23</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-16 open_clientfd ：和服务器建立连接的辅助函数</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在创建了套接字描述符（第7行）后，我们检索服务器的DNS主机条目，并拷贝主机条 目中的第一个IP地址（已经是按照网络字节顺序了）到服务器的套接字地址结构（第11〜16 行)。在用按照网络字节顺序的服务器的知名端口号初始化套接字地址结构（第17行）之后，我 们发起了一个到服务器的连接请求（第20行)。当connect函数返回时，我们返回套接字描述 符给客户端，客户端就可以立即开始用Unix I/O和服务器通信了。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">bind</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">剩下的套接字函数bind、listen和accept被服务器用来和客户端建立连接。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include &lt;sys/socket.h&gt;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int bind(int sockfd, struct sockaddr *my_addr, int addrlen);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0,</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">若出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">bind函数告诉内核将my—addr中的服务器套接字地址和套接字描述符sockfd联系起来。 参数 addrlen 就是 sizeof (sockaddr_in)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">listen</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">客户端是发起连接请求的主动实体。服务器是等待来自客户端的连接请求的被动实体。默 认情况下，内核会认为socket函数创建的描述符对应于主动套接字（active socket),它存在 于一个连接的客户端。服务器调用listen函数告诉内核，描述符是被服务器而不是客户端使</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">用的。</span>
+</tt>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include &lt;sys/socket.h&gt;</span>
+</b>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int listen(int sockfd, int backlog);</span>
+</b>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0,</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">若出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">listen函数将sockfd从一个主动套接字转化为一个监听套接字(listening socket),该套 接字可以接受来自客户端的连接请求。backlog参数暗示了内核在开始拒绝连接请求之前，应 该放入队列中等待的未完成连接请求的数量。backlog参数的确切含义要求对TCP/IP协议的理 解，这超出了我们讨论的范围。通常我们会把它设置为一个较大的值，比如1024。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">open_listen£d</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们发现将socket、bind和listen函数结合成一个叫做open一listenfd的辅助函数 是很有帮助的，服务器可以用它来创建一个监听描述符。</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">"</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int open_1istenfd(int port);</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为描述符，若</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Unix</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">open—listenfd函数打开和返回一个监听描述符，这个描述符准备好在知名端口 port上 接收连接请求。图11-17展示了 open一listenfd的代码。在我们创建了 listenfd套接字描 述符之后，我们使用setsockopt函^ (在这里没有描述）来配置服务器，使得它能被立即终 止和重启。默认地，一个重启的服务器将在大约30秒内拒绝客户端的连接请求，严重地阻碍了 调试。</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int open_listenfd(int port)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2 {</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int listenfd, optval=l;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">struct sockaddr_in serveraddr;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Create a socket descriptor */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((listenfd = socket(AF—INET, SOCK.STREAM, 0)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Eliminates "Address already in use” error from bind</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (setsockopt(listenfd, S0L_S0CKET, SD_REUSEADDR,</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(const void *)&amp;optval , sizeof(int)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">14</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Listenfd will b© an end point for all requests to port</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">on any IP address for this host */</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">bzero((char *) feserveraddr, sizeof(serveraddr));</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serveraddr.sin_family = AF_INET;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serveraddr.sin_addr.s_addr = htonl(INADDE_ANY);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">serveraddr.sin_port = htons((unsigned short)port);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (bind(listenfd, (SA *)&amp;serveraddr, sizeof(serveraddr)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-1;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">23</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Make it a listening socket ready to accept connection requests</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">本</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (listen(listenfd, LISTENQ) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">return</span>
+</span>
+ <span class="calibre2">
+<span class="calibre4">      </span>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre2">
+<span class="calibre4">1;</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">return listenfd;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">:</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">;</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">——^</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">—</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp.</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-17 open_listenfd ：打开和返回一个监听套接字的辅助函数</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">接下来，我们初始化服务器的套接字地址结构，为调用bind函数做准备。在这个例子中， 我们用INADDR—ANY通配符地址来告诉内核这个服务器将接受到这台主机的任何IP地址（第 19行）和到知名端口 port (第20行）的请求。注意，我们用htonl和htons函数将IP地址 和端口号从主机字节顺序转换为网络字节顺序。最后，我们将listenfd转换为一个监听描述 符（第25行)，并将它返回给调用者。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">accept</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">服务器通过调用accept函数来等待来自客户端的连接请求：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include &lt;sys/socket.h&gt;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int accept(int listenfd, struct sockaddr *addr, int *addrlen);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">返回：若成功则为非负连接描述符，若出错则为一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">accept函数等待来自客户端的连接请求到达侦听描述符listenfd,然后在addr中填写 客户端的套接字地址，并返回一个</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">已连接描述符</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（connected descriptor),这个描述符可被用来利 用Unix I/O函数与客户端通信。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">监听描述符和已连接描述符之间的区别使很多人感到迷惑。监听描述符是作为客户端连接请 求的一个端点。典型地，它被创建一次，并存在于服务器的整个生命周期。已连接描述符是客户</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">端和服务器之间已经建立起来了的连接的一个端点。服务器每次接受连接请求时都会创建一次, 它只存在于服务器为一个客户端服务的过程中。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-18描绘了监听描述符和已连接描述符的角色。在第一步中，服务器调用accept,等 待连接请求到达监听描述符，具体地我们设定为描述符3。回忆一下，描述符0〜2是预留给 了标准文件的。在第二步中，客户端调用connect函数，发送一个连接请求到listenfd。 第三步，accept函数打开了一个新的已连接描述符connfd (我们假设是描述符4),在 clientfd和connfd之间建立连接，并且随后返回connfd给应用程序。客户端也从 connect返回，在这一点以后，客户端和服务器就可以分别通过读和写clientfd和cormfd 来回传送数据了。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为何要有监听描述符和已连接描述符之间的区别？</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">你可能很想知道为什么套接字接口要区别监听描述符和已连接描述符。乍一看，这像是不 必要的复杂化。然而，区分这两者被证明是很有用的，因为它使得我们可以建立并发服务器， 它能够同时处理许多客户端连接。例如，每次一个连接请求到达监听描述符时，我们可以派生 (fork) 一个新的进程，它通过已连接描述符与客户端通信。在第12章中将介绍更多关于并发服 务器的内容。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">listenfd(3)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">客户端</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1.服务器阻塞在accept,等待监听 描述符listenfd上的连接请求。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">clientfd</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">连接请求</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">listenfd(3)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">客户端</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2.客户端通过调用和阻塞在connect, 创建连接请求。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">clientfd</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3.服务器从accept返回connfd。客户端 从connect返回。现在在clientfd和 connfd之间已经建立起了连接。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-18监听描述符和已连接描述符的角色</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">11.4.9 echo客户端和服务器的示例</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">学习套接字接口的最好方法是研究示例代码。图11-19展示了一个echo客户端的代码。在 和服务器建立连接之后，客户端进入一个循环，反复从标准输入读取文本行，发送文本行给服务 器，从服务器读取回送的行，并输出结果到标准输出。当fgets在标准输入上遇到EOF时，或 者因为用户在键盘上键入ctrl-d,或者因为在一个重定向的输入文件中用尽了所有的文本行 时，循环就终止。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">循环终止之后，客户端关闭描述符。这会导致发送一个EOF通知到服务器，当服务器从 它的rio一readlineb函数收到一个为零的返回码时，就会检测到这个结果。在关闭它的描 述符后，^户端就终止了。既然客户端内核在一个进程终止时会自动关闭所有打开的描述符, 第24行的close就没有必要了。不过，显式地关闭已经打开的任何描述符是一个良好的编程 习惯。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">listenfd(3)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">客户端</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">connfd(4)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">clientfd</span>
+</b>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echoclient. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int main (int surge, char **argv)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">int clientfd, port;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">char *host, buf[MAXLINE];</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">rio_t rio;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">if (argc != 3) {</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "usage: %s &lt;host&gt; &lt;port&gt;\n", argv[0]);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">host = argv[1];</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">port = atoi(argv[2]);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">clientfd = Open_clientfd(host, port);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Rio_readinitb(&amp;rio, clientfd);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">18</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">while (Fgets(buf, MAXLINE, stdin) != NULL) {</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Rio_writen(clientfd,</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">buf, strlen(buf));</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Rio_readlineb(&amp;rio,</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">buf, MAXLINE);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Fputs(buf, stdout);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Close(clientfd);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echoclient. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-19 echo客户端的主程序</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-20展示了 echo服务器的主程序。在打开监听描述符后</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">它进入一个无限循环。每次 循环都等待一个来自客户端的连接请求，输出已连接客户端的域名和IP地址，并调用echo函 数为这些客户端服务。在echo程序返回后，主程序关闭已连接描述符。一旦客户端和服务器关 闭了它们各自的描述符，连接也就终止了。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">注意，简单的echa服务器一次只能处理一个客户端。这种类型的服务器一次一个地在客户 端间迭代，称为迭代服务器（iterative server)。在第12章中，我们将学习如何建立更加复杂的并 发服务器（concurrent server)，它能够同时处理多个客户端。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">最后，图11-21展示了 echo程序的代码，该程序反复读写文本行，直到rio一readlineb 函数在第10行遇到EOF。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在连接中</span>
+</tt>
+ <span class="calibre4">EOF</span>
+ <tt class="calibre3">
+<span class="calibre4">意味着什么？</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">EOF的概念常常使人们感到迷惑，尤其是在因特网连接的上下文中。首先，我们需要理解 其实并没有像EOF字符这样的一个东西。进一步来说，EOF是由内核检测到的一种条件。应 用程序在它接收到一个由read函数返回的零返回码时，它就会发现EOF条件。对于磁盘文 件，当前文件位置超出文件长度时，会发生EOF。对于因特网连接，当一个进程关闭连接它的 那一端时，会发生EOF。连接另一端的进程在试图读取流中最后一个字节之后的字节时，会检 测到EOF。</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echoserveri. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void echo(int connfd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">A</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int main(int argc, char **argv)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int listenfd, connfd, port, clientlen;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">B</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">struct sockaddr.in clientaddr;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">struct hostent *hp;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char *liaddrp;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (argc != 2) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "usage: %s &lt;port&gt;\n", argv[0]);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">port = atoi(argv[1]);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">16</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">listenfd = Open_listenfd(port);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">while (1) {</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">clientlen = sizeof(clientaddr);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">connfd = Accept(listenfd, (SA *)&amp;clientaddr, &amp;clientlen);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">21</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Determine the domain name and IP address of the client */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">hp = Gethostbyaddr((const char *)feclientaddr.sin_addr.s_addr,</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">sizeof(clientaddr.sin^addr.s_addr), AF_INET);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">haddrp = inet_ntoa(clientaddr.sin_addr);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">printf ("server connected to %s (%s)\n", tLp-&gt;h_name, haddrp);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">27</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">echo(connfd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Close(connfd);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">exit (0);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+       </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echoserverl c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-20迭代echo服务器的主程序</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">;</span>
+</b>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">                                                </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echo. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">10</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">11</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">13</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">11</span>
+</b>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">void echo(int connfd)</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">size_t n;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">char buf[MAXLINE]; rio_t rio;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Rio_readinitb(&amp;rio, connfd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">while((n = Rio_readlineb(&amp;rio, buf, MAXLINE)) != 0)</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">i</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">printf("server received %d bytes\n<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">n</span>
+</b>
+</span>
+</small>
+</sup>
+ , n);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Rio_writen(connfd, buf, n);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/echo. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-21读和回送文本行的echo函数</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">11.5 Web</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">服务器</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">迄今为止，我们已经在一个简单的</span>
+</tt>
+ <span class="calibre4">echo</span>
+ <tt class="calibre3">
+<span class="calibre4">服务器的上下文中讨论了网络编程。在这一节里， 我们将向你展示如何利用网络编程的基本概念，来创建你自己的虽然小但是功能齐全的Web服 务器。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Web 基础</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Web客户端和服务器之间的交互用的是一个基于文本的应用级协议，叫做HTTP (Hypertext Transfer Protocol,超文本传输协议)。HTTP是一个简单的协议。一个Web客户端（即浏览器） 打开一个到服务器的因特网连接，并且请求某些内容。服务器响应所请求的内容，然后关闭连 接。浏览器读取这些内容，并把它显示在屏幕上。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Web服务和常规的文件检索服务（例如FTP)有什么区别呢？主要的区别是Web内容可以 用一种叫做HTML (Hypertext Markup Language,超文本标记语言）的语言来编写。一个HTML 程序（页）包含指令（标记)，它们告诉浏览器如何显示这页中的各种文本和图形对象。例如， 代码</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">&lt;b&gt; Make me bold! &lt;/b&gt;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">告诉浏览器用粗体字类型输出&lt;13〉和&lt;/b&gt;标记之间的文本。然而，HTML真正的强大之处在 于一个页面可以包含指针（超链接)，这些指针可以指向存放在任何因特网主机上的内容。例如， 一个格式如下的HTML行</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">&lt;a href="littp: //www. emu. edu/index. html<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">n</span>
+</b>
+</span>
+</small>
+</sup>
+ &gt;Carnegie Mellon&lt;/a&gt;</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">告诉浏览器高亮显示文本对象“Carnegie Mellon”，并且创建一个超链接，它指向存放在 CMU Web服务器上叫做index.html的HTML文件。如果用户单击了这个高亮文本对象</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">浏 览器就会从CMU服务器中请求相应的HTML文件并显示它。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">万维网的起源</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">万维网</span>
+</tt>
+ <span class="calibre4">（World Wide Web)</span>
+ <tt class="calibre3">
+<span class="calibre4">是</span>
+</tt>
+ <span class="calibre4">Tim Bemers-Lee</span>
+ <tt class="calibre3">
+<span class="calibre4">创建的</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">他是一位在瑞典物理实验室</span>
+</tt>
+ <span class="calibre4">CERN (</span>
+ <tt class="calibre3">
+<span class="calibre4">欧洲粒子物理研究所）工作的软件工程师。</span>
+</tt>
+ <span class="calibre4">1989</span>
+ <tt class="calibre3">
+<span class="calibre4">年，</span>
+</tt>
+ <span class="calibre4">Bemers-Lee</span>
+ <tt class="calibre3">
+<span class="calibre4">写了一个内部备忘录</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">提出 了一个分布式超文本系统，它能连接</span>
+</tt>
+ <span class="calibre4">“</span>
+ <tt class="calibre3">
+<span class="calibre4">用链接组成的笔记的网</span>
+</tt>
+ <span class="calibre4">”（web of notes with links</span>
+ <tt class="calibre3">
+<span class="calibre4">)。提出 这个系统的目的是帮助</span>
+</tt>
+ <span class="calibre4">CERN</span>
+ <tt class="calibre3">
+<span class="calibre4">的科学家共享和管理信息。在接下来的两年多里</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <span class="calibre4">Bemers-Lee</span>
+ <tt class="calibre3">
+<span class="calibre4">实 现了第一个</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">服务器和</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">浏览器之后，在</span>
+</tt>
+ <span class="calibre4">CERN</span>
+ <tt class="calibre3">
+<span class="calibre4">内部以及其他一些网站中，</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">发展出了 小规模的拥护者</span>
+</tt>
+ <span class="calibre4">。• 1993</span>
+ <tt class="calibre3">
+<span class="calibre4">年一个关键事件发生了</span>
+</tt>
+ <span class="calibre4">，Marc Andreesen</span>
+ <tt class="calibre3">
+<span class="calibre4">(他后来创建了</span>
+</tt>
+ <span class="calibre4">Netscape</span>
+ <tt class="calibre3">
+<span class="calibre4">)和他 在</span>
+</tt>
+ <span class="calibre4">NCSA</span>
+ <tt class="calibre3">
+<span class="calibre4">的同事发布了一种图形化的浏览器</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">叫做</span>
+</tt>
+ <span class="calibre4">MOSAIC,</span>
+ <tt class="calibre3">
+<span class="calibre4">可以在三种主要的平台上使用：</span>
+</tt>
+ <span class="calibre4">Unix</span>
+ <tt class="calibre3">
+<span class="calibre4">、</span>
+</tt>
+ <span class="calibre4">Windows</span>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <span class="calibre4">Macintosh</span>
+ <tt class="calibre3">
+<span class="calibre4">。在</span>
+</tt>
+ <span class="calibre4">MOSAIC</span>
+ <tt class="calibre3">
+<span class="calibre4">发布后，对</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">的兴趣爆发了，</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">网站以每年</span>
+</tt>
+ <span class="calibre4">10</span>
+ <tt class="calibre3">
+<span class="calibre4">倍或更高的数量增长。到</span>
+</tt>
+ <span class="calibre4">2009</span>
+ <tt class="calibre3">
+<span class="calibre4">年，世界上已经有超过</span>
+</tt>
+ <span class="calibre4">225 000 000</span>
+ <tt class="calibre3">
+<span class="calibre4">个</span>
+</tt>
+ <span class="calibre4">Web</span>
+ <tt class="calibre3">
+<span class="calibre4">网站了（源自</span>
+</tt>
+ <span class="calibre4">Netcraft Web Survey )<sub class="calibre17">
+<small class="calibre8">
+<span class="calibre4">0</span>
+</small>
+</sub>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Web 内容</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于Web客户端和服务器而言</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">内容是与一个MIME (Multipurpose Internet Mail Extensions, 多用途的网际邮件扩充协议）类型相关的字节序列。图11-22展示了一些常用的MIME类型。 Web服务器以两种不同的方式向客户端提供内容：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•取一个磁盘文件，并将它的内容返回给客户端。磁盘文件称为静态内容（static content), 而返回文件给客户端的过程称为服务静态内容（serving static content)</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">MIME</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">类型</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">描述</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">text/html</span>
+</b>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">text/plain</span>
+</b>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">application/postscript</span>
+</b>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">image/gif</span>
+</b>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">image/jpeg</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">HTML</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">页面 无格式文本</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Postscript</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">文档</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">GIF</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">格式编码的二进制图像</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">JPEG</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">格式编码的二进制图像</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-22 MIME类型示例</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•运行一个可执行文件，并将它的输出返回给客户端。运行时可执行文件产生的输出称为动</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">态内容</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（dynamic content),而运行程序并返回它的输出到客户端的过程称为</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务动态内容</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(serving dynamic content) <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ 每条由Web服务器返回的内容都是和它管理的某个文件相关联的。这些文件中的每一个都 有一个唯一的名字，叫做URL (Universal Resource Locator,通用资源定位符)。例如，URL</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<a href="http://www.google">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre16">
+<span class="calibre14">http://www.google</span>
+</span>
+</tt>
+</span>
+</a>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">. com:80/index.html</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">表示因特网主机www .google .com上一个称为/index.html的HTML文件，它是由一个监 听端口 80的Web服务器管理的。端口号是可选的，而知名的HTTP默认的端口就是80。可执 行文件的URL可以在文件名后包括程序参数。“？”字符分隔文件名和参数，而且每个参数都用 “&amp;”字符分隔开。例如，URL</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<a href="http://bluefish.ics.cs.emu.edu:8000/cgi-bin/adder?15000&amp;213">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre16">
+<span class="calibre14">http://bluefish.ics.cs.emu.edu:8000/cgi-bin/adder?15000&amp;213</span>
+</span>
+</tt>
+</span>
+</a>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">掭识了一</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">个叫做</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">/cgi-bin/adder的可执行文件，会带两个参数字符串1<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</small>
+</sup>
+ 000和21<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</small>
+</sup>
+ 来调用</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">io</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">在事务过程中，客户端和服务器使用的是URL的不同部分。例如，客户端使用前缀</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<a href="http://www">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre16">
+<span class="calibre14">http://www</span>
+</span>
+</tt>
+</span>
+</a>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">. google. com:80</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">来决定与哪类服务器联系，服务器在哪里，以及它监听的端口号是多少。服务器使用后缀</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/index.html</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">来发现在它文件系统中的文件，并确定请求的是静态内容还是动态内容。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">关于服务器如何解释一个URL的后缀，以下几点需要理解：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•确定一个URL指向的是静态内容还是动态内容没有标准的规则。每个服务器对它所管理 的文件都有自己的规则。一种常见的方法是，确定一组目录</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">例如cgi-bln,所有的可 执行性文件都必须存放这些目录中。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•后缀中的最开始的那个“/”不表示Unix的根目录。相反，它表示的是被请求内容类型 的主目录。例如，可以将一个服务器配置成这样:所有的静态内容存放在目录/usr/ httpd/html下，而所有的动态内容都存放在目录/usr/httpd/cgi-bin下。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•最小的URL后缀是“/”字符，所有服务器将其扩展为某个默认的主页，例如/ipdex. html。这解释了为什么简单地在浏览器中键入一个域名就可以取出一个网站的主页。浏览 器在URL后添加缺失的“/”，并将之传递给服务器，服务器又把“/”扩展到某个默认的 文件名。</span>
+</tt>
+</p>
+<span id="filepos0006357578"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">HTTP 事务</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">因为HTTP是基于在因特网连接上传送的文本行的，我们可以使用Unix的TELNET程序来和 因特网上的任何Web服务器执行事务。对于调试在连接上通过文本行来与客户端对话的服务器来</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">说，</span>
+</tt>
+ <span class="calibre4">TELNET</span>
+ <tt class="calibre3">
+<span class="calibre4">程序是非常便利的。例如，图</span>
+</tt>
+ <span class="calibre4">11-23</span>
+ <tt class="calibre3">
+<span class="calibre4">使用</span>
+</tt>
+ <span class="calibre4">TELNET</span>
+ <tt class="calibre3">
+<span class="calibre4">向</span>
+</tt>
+ <span class="calibre4">AOL Web</span>
+ <tt class="calibre3">
+<span class="calibre4">服务器请求主页。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">i</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">皿</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">ix&gt;</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">telnet</span>
+</b>
+</i>
+</span>
+ <a href="http://www.aol.com">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre16">
+<span class="calibre14">www.aol.com</span>
+</span>
+</b>
+</i>
+</span>
+</a>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">80</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">open connection to</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">server</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Trying 205.188.146.23...</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Telnet prints 3 lines to the terminal</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Connected to aol.com.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Escape character is</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">卜</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">]<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">GET / HTTP/1.1</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">：</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">request line</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Host: www</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">•</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">aol•com</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">required HTTP/1.1 header</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">empty line terminates headers</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">HTTP/1.0 200 OK</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">_</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">response line</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">MIME-Version: 1.0</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">：</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">followed by five response headers</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">10</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">11</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Date</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Mon, 8 Jan 2010 4:59:42 GMT Server</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Apache-Coyote/</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">.</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">'12</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Content-Type: text/html</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">expect HTML in the response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">13</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Content-Length</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">42092</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">：</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">expect 42,092 bytes</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">in</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">the response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">14</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">Server:</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">empty line terminates response headers</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&lt;html&gt;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">first HTML line in response body-</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">16</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">766 lines of HTML not shown</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">17</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&lt;/html&gt;</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">last HTML line in response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">18</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Connection closed by foreign host.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">closes connection</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">19</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">unix&gt;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">closes connect ion</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">and</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">terminates</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-23 —个服务静态内容的HTTP事务</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在第1行<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">？</span>
+</tt>
+</small>
+</sub>
+ 我们从Unix外壳运行TELNET,要求它打开一个到AOL Web服务器的连接。 TELNET向终端打印三行输出，打开连接，然后等待我们输入文本（第5行)。每次我们输入一 个文本行，并键入回车键，TELNET会读取该行，在后面加上回车和换行符号（在C的表示中 为“\r\n”)，并且将这一行发送到服务器。这是和HTTP标准相符的，HTTP标准要求每个文 本行都由一对回车和换行符来结束。为了发起事务，我们输人一个HTTP请求（第5〜7行)。 服务器返回HTTP响应（第8〜17行)，然后关闭连接（第18行)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">HTTP</span>
+ <tt class="calibre3">
+<span class="calibre4">请求</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">一个HTTP请求的组成是这样的：一个请求行（request line)(第5行)，后面跟随零个或更 多个请求报头（request header)(第6行)，再跟随一个空的文本行来终止报头列表（第7行)。 一个请求行的形式是</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&lt;method&gt; &lt;uri&gt; &lt;version&gt;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">HTTP 支持许多不同的方法，包括 GET、POST、OPTIONS、HEAD、PUT、DELETE 和 TRACE。我们将只讨论广为应用的GET方法，根据某项调査研究，它占了 99%的HTTP请求 [107]。GET方法指导服务器生成和返回URI (Uniform Resource Identifier,统一资源标识符）标 识的内容。URI是相应的URL的后缀，包括文件名和可选的参数。<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">e</span>
+</tt>
+</small>
+</sup>
+</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">请求行中的&lt;version&gt;字段表明了该请求遵循的HTTP版本。最新的HTTP版本是 HTTP/1.1[41]。HTTP/1.0是从1996年沿用至今的老版本[6]。HTTP/1.1定义了一些附加的报头, 为诸如缓冲和安全等高级特性提供支持，它还支持一种机制，允许客户端和服务器在同一条持久 连接(persistent connection)上执行多个事务。实际上，两个版本是互相兼容的，因为HTTP/1.0 的客户端和服务器会简单地忽略HTTP/1.1的报头。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">㊀实际上，只有当浏览器请求内容时，这才是真的。如果代理服务器请求内容，那么这个URI必须是完整的URL。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">总的来说，第5行的请求行要求服务器取出并返回HTML文件/index.html。它也告知 服务器请求剩下的部分是HTTP/1.1格式的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">'请求报头为服务器提供了额外的信息，例如浏览器的商标名，或者浏览器理解的MIME类 型。请求报头的格式为</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&lt;header name&gt;: &lt;header data&gt;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">针对我们的目的，唯一需要关注的报头是Host报头（第6行)，这个报头在HTTP/1.1请求中是需 要的，而在HTTP/1.0请求中是不需要的。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">代理缓存</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（proxy cache)会使用Host报头，这个代理 缓存有时作为浏览器和管理被请求文件</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的原始服务器</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（origin server)的中介。客户端和原始服务 器之间，可以有多个代理，即所谓的</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">代理链</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（proxy chain)。Host报头中的数据指示了原始服务器 的域名，使得代理链中的代理能够判断它是否可以在本地缓存中拥有一个被请求内容的副本。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">继续图11-23中的示例，第7行的空文本行（通过在键盘上键入回车键生成的）终止了报 头，并指示服务器发送被请求的HTML文件。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">HTTP响应</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">HTTP响应和HTTP请求是相似的。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一个</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">HTTP响应的组成是这样的</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">：</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一个响应行</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(response line)(第8行）后面跟随着零个或更多的响</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">应报头</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（response header)(第9〜13行</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">），</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">再跟随一个终止报头的空行（第14行)，再跟随</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一个响应主体</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（response body)(第15〜17行)。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一个响</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">应行的格式是</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&lt;version&gt; 〈status code&gt; &lt;status message〉</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">版本字段描述的是响应所遵循的HTTP版本。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">状态码</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（status code)是一个三位的正整数, 指明对请求的处理。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">状态消息</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（status message)给出与错误代码等价的英文描述。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">图</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">11-24列出 了一些常见的状态码，以及它们相应的消息。第9〜13行的响应拫头提供了关于响应的附加信 息。针对我们的目的，两个最重要的报头是Content-Type (第12行)，它告诉客户端响应主 体中内容的MIME类型；以及Content-Length (第13行)，用来指示响应主体的字节大小。 第14行的终止响应报头的空文本行，其后跟随着响应主体，响应主体中包含着被请求的内容。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">状态代码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">状态消息</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">描述</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">200</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">成功</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">处理请求无误 .</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">301</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">永久移动</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">内容已移动到位置头中指明的主机#</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">400</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">错误请求</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器不能理解请求</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">403</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">禁止</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器无权访问所请求的文件</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">404</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">未发现</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器不能找到所请求的文件</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">501</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">未实现</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器不支持请求的方法</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">505</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">HTTP版本不支持</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">服务器不支持请求的版本</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-24 —些HTTP状态码</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">11.5.4服务动态内容</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果我们停下来考虑一下，一个服务器是如何向客户端提供动态内容的，就会发现一些问题。 例如，客户端如何将程序参数传递给服务器？服务器如何将这些参数传递给它所创建的子进程？ 服务器如何将子进程生成内容所需要的其他信息传递给子进程？子进程将它的输出发送到哪里？ 一个称为CGI (Common Gateway Interface,通用网关接口）的实际标准的出现解决了这些问题。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1.客户端如何将程序参数传递给服务器</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">GET请求的参数在URI中传递。正如我们看到的，一个“？”字符分隔了文件名和参数，而 每个参数都用一个“&amp;”字符分隔开。参数中不允许有空格，而必须用字符串“%20”来表示。 对其也特殊字符，也存在着相似的编码。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在</span>
+</tt>
+ <span class="calibre4">HTTP POST</span>
+ <tt class="calibre3">
+<span class="calibre4">请求中</span>
+</tt>
+ <span class="calibre4">ft</span>
+ <tt class="calibre3">
+<span class="calibre4">递参数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">HTTP POST</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">请求的参数是在请求主体中而不是</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">URI</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">中传递的。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">服务器如何将参数传递给子进程</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在服务器接收一个如下的请求后</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">GET /cgi-bin/adder?15000&amp;213 HTTP/1.1</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它调用fork来创建一个子进程，并调用execve在子进程的上下文中执行/cgi-bin/adder 程序。像adder这样的程序，常常称为CGI程序，因为它们遵守CGI标准的规则。而且，因为 许多CGI程序是用Perl脚本编写的，所以CGI程序也常称为CGI脚本。在调用execve之前, 子进程将CGI环境变量QUERY—STRING设置为“15000&amp;213”，adder程序在运行时可以用 Unix getenv函数来引用它。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">服务器如何将其他信息传递给子进程</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">CGI定义了大量的其他环境变量，一个CGI程序在它运行时可以设置这些环境变量。图</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">11-25给出了其中的一部分。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">环境变量</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">描述</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">QUERY_STRING SERVER—PORT REQUEST_METHOD REMOTE</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">HOST REMOTE</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">ADDR CONTENT</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">TYPE CONTENT</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">LENGTH</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">程序参数 父进程侦听的端口</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">GET</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">或</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">POST</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">客户端的域名</span>
+</tt>
+</span>
+</blockquote>
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">客户端的点为十进制</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">IP</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">地址 只对</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">POST</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">而言：请求体的</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">MIME</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">类型 只对</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">POST</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">而言<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">：</span>
+</tt>
+</span>
+</small>
+</sub>
+ 请求体的字节大小</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-25 CGI环境变量示例</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre4">4</span>
+ <tt class="calibre3">
+<span class="calibre4">.子进程将它的输出发送到哪里</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">一个CGI程序将它的动态内容发送到标准输出。在子进程加载并运行CGI程序之前，它使 用Unix du<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ 2函数将标准输出重定向到和客户端相关联的已连接描</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">述符。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">因此，任何CGI程序 写到标准输出的东西都会直接到达客户端。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">注意，因为父进程不知道子进程生成的内容的类型或大小，所以子进程就要负责生成</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Content-type</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Content-length</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">响应报头，以及终止报头的空行。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-26展示了一个简单的CGI程序，它对两个参数求和，并返回带结果的HTML文件给 客户端。图11-27展示了一个HTTP事务，它根据adder程序提供动态内容。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">将</span>
+</tt>
+ <span class="calibre4">HTTP POST</span>
+ <tt class="calibre3">
+<span class="calibre4">请求中的参数传递给</span>
+</tt>
+ <span class="calibre4">CGI</span>
+ <tt class="calibre3">
+<span class="calibre4">程序</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">对于</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">POST</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">请求，子进程也需要重定向标准输入到已连接描述符。然后，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">CGI</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">程序会从标准 输入中读取请求主体中的参数。</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">®练习题</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">11.5在10.9节中，我们警告过你关于在网络应用中使用C标准I/O函数的危险。然而，图 11-26中的CGI程序却能没有任何问题地使用标准I/O。为什么呢?</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/tiny/cgi-bin/adder. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">0 1 2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6.</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">20</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">21</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">22</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">23</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">24</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">25</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">26</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">27</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">28</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">29</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.31</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int main(void) { char *buf, *p;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char argl[MAXLINE], arg2[MAXLINE], content[MAXLINE]; int nl:0, n2=0;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Extract the two arguments */</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">•</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">((buf : getenvC'QUERY^STRING")) != NULL) { p = strchr(buf,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*p = '\0'; strcpy(argl, buf); strcpyCarg2, p+1); nl = atoi(argl); n2 = atoi(arg2);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Make the response body</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sprintf(content, "Welcome to add.com:");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sprintf(content, "%sTHE Internet addition portal.\r\n&lt;p&gt;", content); sprintf(content, "%sThe answer is: %d + %d = %d\r\n&lt;p&gt;", content, nl, n2, nl + n2); sprintf (content, "7<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ sThanks for visiting! \r\n", content);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Generate the HTTP response</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">printf("Content-length: %d\r\n<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">M</span>
+</tt>
+</span>
+</small>
+</sup>
+ , (int)strlen(content));</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("Content-type: text/html\r\n\r\n"); printf("%s", content); fflush(stdout); exit(O);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/tiny/cgi-bin/adder. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图11-26对两个整数求和的CGI程序</span>
+</b>
+</tt>
+</span>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">unix&gt;</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">telnet</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.cs.cjnu.edu</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">8000 Client: open connection</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Trying 128.2.194.</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">242...</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Connected to kittyhawk.cmcl.cs. emu.edu,</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Escape character is <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ .</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">GET /cgi-bin/adder?15000&amp;213 HTTP/1.0</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">‘</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">request line</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">' empty line terminates headers</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">HTTP/1.0 200 OK</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">■ response line</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Server: Tiny Web Server</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">■ identify server</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Content-length: 115</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">expect 115 bytes in response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">10</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Content-type: text/html</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">expect HTML in response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">11</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">empty line terminates headers</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="3" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Welcome to add. com</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">THE Internet addition portal</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">：</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">first HTML line</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">13</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&lt;p&gt;Tlie answer is: 15000 + 213 = 15213</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">second HTML line in response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">14</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">&lt;p&gt;Thanks for visiting!</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Adder:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">third HTML line in response body</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Connection closed by foreign host.</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Server:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</i>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">cJosgs</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">connection</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">16</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">unix&gt;</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Client:</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">'closes connection and terminates</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">11.6</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">综合</span>
+</tt>
+</span>
+ <span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">.• TINY Web</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">服务器</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们通过开发一个虽然小但是功能齐全的称为TINY的Web服务器来结束我们对网络编程 的讨论。TINY是一个有趣的程序。在短短250行代码中，它结合了许多我们已经学习到的思想, 例如进程控制、Unix 1/0、套接字接口和HTTP。虽然它缺乏一个实际服务器所具备的功能性、 健壮性和安全性，但是它足够用来为实际的Web浏览器提供静态和动态的内容。我们鼓励你研 究它，并且自己实现它。将一个实际的浏览器指向你自己的服务器，看着它显示一个复杂的带有 文本和图片的Web页面，真是非常令人兴奋（甚至对我们这些作者来说,也是如此)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">TINY</span>
+ <tt class="calibre3">
+<span class="calibre4">的</span>
+</tt>
+ <span class="calibre4">main</span>
+ <tt class="calibre3">
+<span class="calibre4">程序</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-28展示了 TINY的主程序。TINY是一个迭代服务器，监听在命令行中传递来的端口 上的连接请求。在通过调用open_listenfd函数打开一个监听套接字以后，TINY执行典型的 无限服务器循环，不断地接受连接请求（第31行)，执行事务（第32行)，并关闭连接它的那一 端（第33行)。</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/tiny/tiny. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">卜</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">* tiny, c - A. simple, iterative HTTP/1.0 Web server that</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">uses the</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">氺</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">GET method to serve static and dynamic content.</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">void</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">doit(int fd);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">read_requesthdrs(rio一t *rp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int parse_uri(char *uri, chax *filename, char *cgiaxgs);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serve_static(int fd, chax *filename,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">filesize);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">get_filetype(char *filename,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*filetype);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">void serve_dynamic(int fd, char *filename, char *cgiargs);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void clienterror(int fd, char *cause, char *errnum,</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char *shortmsg, char 木longmsg);</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">lfi</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int main (int argc, cliar **argv)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int listenfd, connfd,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">port, clientlen;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">struct sockaddr^in clientaddr;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">20</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/* Check command line</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">args */</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (argc != 2) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "usage: %s &lt;port&gt;\n", argv[0]);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2A</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(l);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">2.5</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">port = atoi(argv[1]);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">27</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•28</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">listenfd = 0pen_listenfd(port);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">while Cl)</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">i</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">30'</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">clientlen = sizeof(clientaddr);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">connfd = Accept(listenfd,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(SA</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*)&amp;clientaddr, ftclientlen);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">doit(connfd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Close(connfd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">—</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/tiny/tiny. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11 -28 TINY Web服务器</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre4">doit</span>
+ <tt class="calibre3">
+<span class="calibre4">函数</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图11-29中的doit函数处理一个HTTP事务。首先，我们读和解析请求行（第11〜12 行)。注意，我们使用图11-7中的rio一readlineb函数读取请求行。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">TINY只支持GET方法。如果客/½请求其他方法（比如POST),我们发送给它一个错误 信息，并返回到主程序（第13〜17行)，主程序随后关闭连接并等待下一个连接请求。否则， 我们读并且（像我们将要看到的那样）忽略任何请求报头（第18行)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/netp/tiny/tiny. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">0 1 2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">9</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">20</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">21</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">22</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">23</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<span class="calibre4">.</span>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">28</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">30</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">U</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">n</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">34</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">35</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">36</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">37</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">38</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">40</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">41</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">42</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">43</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">44</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void doit(int fd)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int is_static; struct stat sbuf;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE]; char filename[MAXLINE], cgiargs[MAXLINE]; rio_t rio;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/<sup class="calibre23"><span id="filepos0006422672"></span>
+ <small class="calibre8">
+<a href="part0029.html#filepos0006953139">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">15</span>
+</tt>
+</span>
+</a>
+</small>
+</sup>
+ Read request line and headers</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Rio_readinitb(&amp;rio, fd);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Rio_readlineb(&amp;rio, buf, MAXLINE);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">sscanf(buf, "%s %s %s", method, uri, version);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (strcasecmp(method, "GET")) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">clienterror(fd, method, "501", "Not Implemented",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">"Tiny does not implement this method");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">read_requesthdrs(&amp;rio);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Parse UM from GET request */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">is.static = parse_uri(uri, filename, cgiargs);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (stat(filename, &amp;sbuf) &lt; 0) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">clienterror(fd, filename, "404", "Not found",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">"Tiny couldn't find this file");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">if (is.static) { /* Serve static content</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">本</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (!(S^ISEEGCsbuf.st.mode))丨丨！（S_IRUSR &amp; sbuf.st_mode)) { clienterror(fd, filename, "403", "Forbidden",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">"Tiny couldn't read the file");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serve_static(fd, filename, sbuf.st_size);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">else { /*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">Serve</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">dynamic content */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (!(S_ISREG(sbuf.st.mode)) II !(S.IXUSR &amp; sbuf.st_mode)) { clienterror(fd, filename, "403", "Forbidden",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">"Tiny couldn't run the CGI program");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">serve一dynamic(fd, filename, cgiargs);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+</body>
+</html>

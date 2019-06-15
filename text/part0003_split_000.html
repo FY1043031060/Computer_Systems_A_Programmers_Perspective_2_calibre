@@ -1,0 +1,6914 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>未知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00021.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">高位，我们就得到[0101],也就是十进制值的5。这就和值21 mod 16 = 5—致。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-20整数加法。对于一个4位的字长，其和可能需要5位</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">.一般而言，我们可以看到，如果;c+y&lt;2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ ,则和的w+1位表示中的最高位会等于0,因此 丢弃它不会改变这个数值。另一方面，如果2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ &lt;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">则和的w+1位表示中的最高位会</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">等于1，因此丢弃它就相当于从和中减去了 2'图2-21说明了这两种情况。这样会得到一个范 围0&lt;尤+;；-^&lt;2#<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ -2” = 2”中的值，刚好等于jc与;；的和模广的结果。现在定义参数x和 少的运算+二 j^MO &lt;</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x,y&lt;2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ ,</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">X 〜…<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">&lt;2W</span>
+</tt>
+</small>
+</sup>
+</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">^</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">(2-11)</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">\x + y-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ , 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</small>
+</sup>
+ &lt;x + y&lt; 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W+1</span>
+</i>
+</tt>
+</small>
+</sup>
+ 这正好是在C中执行两个w位无符号数值加法时得到的结果。</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00022.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-21整数加法和无符号加法间的关系。当;c+j；大于2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ -1时，其和溢出</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">一个算术运算溢出，是指完整的整数结果不能放到数据类型的字长限制中去。如等式 (2-11)所示，当两个运算数的和为2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ 或者更大时，就发生了溢出。图2-22展示了字长w = 4的 无符号加法函数的坐标图。这个和是按模2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</small>
+</sup>
+ =16计算的。当;r+;；&lt;16时，没有溢出，并且jc+<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</small>
+</sub>
+ <sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">u</span>
+</tt>
+</small>
+</sup>
+ y 就是x+y,这对应于图中标记为“正常”的斜面。当16时，加法溢出，结果相当于从和 中减去16,这对应于图中标记为“溢出”的斜面。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00023.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-22无符号加法（4位字长，加法是模16的）</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">当执行C程序时，不会将溢出作为错误而发信号。不过有的时候，我们可能希望判定是否 发生了溢出。比如，假设计算+</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">并且我们想要判定r是否等于；c+y。我们声称当且仅当</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">没&lt;x (或者等价地sC;；)时，发生了溢出。要明白这一点，请注意因此如果^没有 溢出，我们能够肯定另一方面，如果s确实溢出了，我们就有FX + yj'假设少&lt;2' 我们就有y —2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ &lt;0,因此5 = &lt;+(少一2")&lt;1在前面的示例中，我们看到9+<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</small>
+</sub>
+ <sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">u</span>
+</tt>
+</small>
+</sup>
+ 12=5。由于 5 &lt;9,我们可以看出发生了溢出。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.27写出一个具有如下原型的函数：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Determine whether arguments can be added without overflow */</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int uadd_ok(unsigned x, unsigned y);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果参数x和y相加不会产生溢出，这个函数就返回1。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">尤，</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">^<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+</small>
+</sup>
+ °</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">(2-12)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2<sup class="calibre31">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ -X<sub class="calibre29">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">9</span>
+</i>
+</tt>
+</span>
+</small>
+</sub>
+</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">X&gt;0</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">模数加法形成了一种数学结构，称为阿贝尔群（Abelian group),这是以丹麦数学家Niels Henrik Abel (1802〜1829)的名字命名。也就说，它是可交换的（这就是为什么叫“abelian” 的地方）和可结合的。它有一个单位元0,并且每个元素有一个加法逆元。考虑w位的无符号数 的集合，执行加法运算对于每个值X，必然有某个值-满足-：U+；&gt;=0。当；c = 0时，加 法逆元显然是0。对于；c&gt;0,考虑值2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ -x。我们观察到这个数字在0&lt;2”-1&lt;2”范围之内，并 且(x + 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ -尤)111()(12〜=2^111()(12^ = 0。因此，它就是;c在+；：下的逆元。这两种情况就导出了对于 0&lt;x&lt;2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ 的等式</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">：</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">—u <sub class="calibre29">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<span class="calibre4">r</span>
+</tt>
+</span>
+</small>
+</sub>
+ —</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</tt>
+</small>
+</sup>
+ -</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题2.28我们能用一个十六进制数字来表示长度w=4的位模式。对于这些数字的无符号解释，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">使用等式(2-12)填写下表,给出所示数字的无符号加法逆元的位表示（用十六进制形式)。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">—&gt;</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十六进制</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十六进制</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">D</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">F</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2.3.2补码加法</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于补码加法，我们必须确定当结果太大（为正)或者太小（为负）时,应该做些什么。给 定在范围—2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W-1</span>
+</tt>
+</small>
+</sup>
+ &lt; x，&lt;</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ ~<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">l</span>
+</i>
+</tt>
+</small>
+</sup>
+ -l</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">之内的整数值x和少，它们的和就在范围-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ &lt; jc + &lt;</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">T-2</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">之 内，要想准确表示，可能需要位。就像以前一样，我们通过将表示截断到w位，来避免数 据大小的不断扩张。然而，结果却不像模数加法那样在数学上感觉很熟悉。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">两个数的w位补码之和与无符号之和有完全相同的位级表示。实际上，大多数计算机使用 同样的机器指令来执行无符号或者有符号加法。因此，我们能够定义字长为w的、运算数x和 上的补码加法U和;;满足-2旷<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ &lt;孓少&lt; 2"-<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ ),表示为+</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">:：</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">X y = U2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (T2U<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (x) T2U<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (y))</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">.</span>
+</b>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(2-13)</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">根据等式（2-5),我们可以把：T2t/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ (;c)写成;+</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">把r2C/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ (y)写成;vf+3；。使用属</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">性，即+<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ <sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">u</span>
+</tt>
+</small>
+</sup>
+ 是模2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ 的加法，以及模数加法的属性，我们就能得到:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x =</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">U2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (T2U<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (x)</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">+:</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">T2U<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (y))</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">U2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ [(x<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ _{l<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sup>
+</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">+ x + u2出 + y) mod</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</i>
+</small>
+</sup>
+ ]</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">= U2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ [{x .+ y)</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">mod 2^]</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">消除了 xn2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ 和这两项，因为它们模2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ 等于0。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了更好地理解这个数量，定义z为整数和gjc+h f为z’hmod 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ ，而z"为 数值z”等于;c+&gt;。我们分成4种情况分析，如图2-23所示。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">情况3</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">情况2</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00024.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">T+2<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">w_1</span>
+</b>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">图2-23整数和补码加法之间的关系。当x+j； 小于一时，产生负溢出。当它大 于2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W_1</span>
+</tt>
+</small>
+</sup>
+ +1时，产生正溢出</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ &lt;z&lt;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ -<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ 然后，我们会有f = z+2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">检查等式（2-8),</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们看到z’在满足的范围之内。这种情况称 为负溢出（negative overflow)。我们将两个负数x 和少相加（这是我们能得到z &lt; -2"-<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ 的唯一方式)，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">得到一个非负的结果z”=x +对2'</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-2〜&lt;2&lt;0。那么，我们又将有z’= z+2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ ,得到-2^+2^2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ ^<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ &lt; ^ &lt; 2' 检査等式 (2-8),我们看到z'在满足z”=z' -2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ 的范围之内，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">因此2”=2'-2”=2 + 2〜一2^2。也就是说，我们的 补码和Z”等于整数和X +7。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">0 &lt; z &lt; 那么，我们将有f = z，得到</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&lt;^&lt;</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ -\</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">因此z"=y=z。补码和z"又等于整 数和x+7。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2^&lt;2&lt;2'我们又将有得到 2一&lt;2'&lt;2'但是在这个范围内，我们有z"=</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">z<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">f</span>
+</i>
+</tt>
+</small>
+</sup>
+ -2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">f</span>
+</i>
+</tt>
+</small>
+</sub>
+</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">得到z"=x+;;-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ 。这种情况称为正溢出（positive overflow)。我们将正数jc和相加（这 是我们能得到z &gt; 2-<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ 的唯一方式)，得到一个负数结果-2'</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">通过前面的分析可以证明，范围在-2“</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">-1之内的；c和j；实施运算+丨时，我</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">们有下面这样的式子</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x + y-2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sup>
+ ,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">正溢出</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(2-14)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">jc + y，</span>
+</b>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">-2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sup>
+ -<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</i>
+</small>
+</sup>
+ &lt;x-^y&lt;2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sup>
+ ~<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</i>
+</small>
+</sup>
+</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">正常</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">^ + ^ + 2^, x + &gt;；&lt;-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ —<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ ： 负溢出</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-24展示了一些4位补码加法的示例作为说明。每个示例的情况都被标号为对应于等式 (2-14)的推导过程中的情况。注意2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</small>
+</sup>
+ =16,因此负溢出得到的结果比整数和大16,而正溢出得 到的结果比之小16。我们包括了运算数和结果的位级表示。可以观察到，能够通过对运算数执 行二进制加法并将结果截断到4位，从而得到结果。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">x +y</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">情况</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">• <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">—</span>
+</b>
+</span>
+</small>
+</sup>
+ 5</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-13</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[1000]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[1011]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[10011]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[0011]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">16</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[1000]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[1000]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[10000]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[0000]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">-3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[1000]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[0101]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[11101]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[1101]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">7</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">7</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[0010]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[0101]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[00111]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[0111]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">10</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">—6</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[0101]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[0101]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[01010]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">[1010]</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-24补码加法示例。通过执行运算数的二进制加法并将结果截断到4位，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">可以获得4位补码和的位级表示</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-25阐明了字长w = 4的补码加法。运算数的范围为一8〜7。当；c+;；&lt;—8时，补码加 法就会负溢出，导致和增加了 16。当-8&lt;jc+7&lt;8时，加法就产生x+少。当jc+y&gt;8,加法 就会正溢出，使得和减少了 16。这三种情况中的每一种都形成了图中的一个斜面。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">等式（2-14)也让我们认出了哪些情况下会发生溢出。当x和y都是负数，但是 尤+：^&gt;0时，我们就会得到负溢出。当x和7都是正数，但是时，我们会得 到正溢出。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题2.29按照图2-24的形式填写下表。分别列出5位参数的整数值、整数和的数值、补码和的数 值、补码和的位级表示，以及属于等式（2-14)推导中的哪种情况。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">X</span>
+</b>
+</i>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x+y</span>
+</b>
+</i>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">情况</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[10100]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[10001]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[11000]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[11000]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[10111]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[01000]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[00010]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[00101]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[01100]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">[00100]</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.30写出一个具有如下原型的函数:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Determine whether arguments can be added without overflow</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">int tadd_ok(int x, int y);</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果参数X和y相加不会产生溢出，这个函数就返回1。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">_练习题</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">2.31你的同事对你补码加法溢出条件的分析有些不耐烦了，他给出了一个函数tadd一 ok的 实现，如下所示：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Determine whether arg\xments can be added without overflow */ /* WARNING: This code is buggy. */•</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int tadd_ok(int x, int y) { int sum = x+y;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return (sum-x == y) &amp;&amp; (sum-y == x);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">你看了代码以后笑了。解释一下为什么。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">2.32你现在有个任务，编写函数t<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">SU</span>
+</tt>
+</small>
+</sub>
+ b_ok的代码，函数的参数是x和y,如果计算x-y不 产生溢出，函数就返回1。假设你写的练习题2.30的代码如下所示</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">：.</span>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Determine whether argnmeirts can be subtracted without overflow */</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/本</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">WARMING: This code is buggy. */</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int tsub_ok(int x, int y) { return tadd_ok(x, ~y);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">x和y取什么值时，这个函数会产生错误的结果？写一个该函数的正确版本（家庭作业2.74)。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00025.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-25补码加法（字长为4位的情况下，当;8时，产生负溢出；8时，会产生正溢出） 2.3.3补码的非</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们可以看到范围在&lt;2〜中的每个数字;c都有+丨下的加法逆元。首先，对于 x ^ -2"-<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ ,我们可以看到它的加法逆元就是ic。也就是，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">—x + x = 0。另一方面，对于^ =</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">- 1 = 2^<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ 不能表示为一个w位的数。我们声明，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个特殊值本身就是它在+丨下的加法逆元。-2^+:^2^<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ 的值由等式（2-14)的第三种情况给 出，因为+—2“ = 一2'最后得出=</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">+</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">从这个分析中，我们可以</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">定义对于范围-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W_1</span>
+</tt>
+</small>
+</sup>
+ &lt; x&lt;2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w_1</span>
+</tt>
+</small>
+</sup>
+ 内的x,补码的非运算（negationoperation) -丨如下：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00026.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</small>
+</sup>
+ ~\ x = - 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</small>
+</sup>
+ ' —x, x &gt; — 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</small>
+</sup>
+ '</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">(2-15)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.33我们可以用一个十六进制数字来表示长度w=4的位模式。根据这些数字的补码的解释， 填写下表，确定所示数字的加法逆元。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">~4<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</span>
+</small>
+</sup>
+</span>
+</i>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十六进制</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十进制'</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">十六进制</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">5</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">F</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td colspan="3" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">对于补码和无符号（见练习题2.28)非（negation)产生的位模式，你观察至!</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">什么？</span>
+</tt>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">网络旁注DATA ： TNEG ：补码非的位级表示</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">计算一个位级表示的值的补码非有几种聪明的方法。这些技术；f艮有用（例如当你在调试程序 的时候遇到值Oxfffffffa),同时它们也能够让你更了解补码表示的本质。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">行位级补码非的第一种方法是对每一位求补，再对结果加1。在C语言中，我们可以确定, 对于任意整数值x,计算表达式-x和〜x+1得到的结果完全一样。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">下面是一些字长为4的示例：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">incri-x)</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">I t u u u</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">
+<s class="calibre35">--=-</s>
+</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">-</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o o o</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o o o o o o</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o o</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">X ix ix [[[rL rL</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[0l0l]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[Olll]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[IlOO]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[0000]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[10QQ]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">
+<s class="calibre35">r</s>
+</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">J</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">i -■</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">
+<s class="calibre35">i</s>
+</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">u u u</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o 1 1 1</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o 1 1 1</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">CD o 1 1</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">.1 o</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">X o rL rL rL</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">[</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">rL</span>
+</tt>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">从前面的例子我们知道Oxf的补是0耳0,而Oxa的补是0x5,因而Oxfff f f ffa是—6的 补码表示。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">计算一个数x的补码非的第二种方法是建立在将位向量分为两部分約基础之上的。假设灸是 最右边的1的位置，因而x的位级表示形如1，0，…，0]。（只要x关0就能够找 到这样的奴）这个值的非写成二进制格式就是…，〜1，0，…，0]。也就是，我们对 位位置A左边的所有位取反。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们用一些4位数字来说明这个方法,这里用斜体来突出最右边的模式1, 0, •••,():</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">4 8 5 7</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">-I I</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">甽叫切0./] 7 0 0 0</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">o</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">
+<span class="calibre14">7</span>
+</span>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">.1. .1</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">-4-85 7 ^ ^ 0 0 o 1 [1^§,[01[01</span>
+</tt>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2.3.4无符号乘法</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">范围在0 &lt;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">&lt;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</small>
+</sup>
+ -\</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">内的整数；c和;;可以表示为w位的无符号数，但是它们的乘积;c</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的取值范围为0到(211^ = 2^-2^+1之间。这可能需要2w位来表示。不过，C语言中的无符 号乘法被定义为产生w位的值，就是2w位的整数乘积的低w位表示的值。根据等式（2-9),这 可以看作等价于计算乘积模2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ 因此，w位无符号乘法运算* :的结果为：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x = (x - y) mod 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">W</span>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">(2-16)</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2.3.5补码乘法</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">范围在-2—</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">内的整数jc和可以表示为w位的补码数字，但是它们的乘</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">积尤7的取值范围在—2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W_1</span>
+</tt>
+</small>
+</sup>
+ • (2^-1) =</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">2.2+2^<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</small>
+</sup>
+ 和</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W_1</span>
+</tt>
+</small>
+</sup>
+ .</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</tt>
+</small>
+</sup>
+ ~<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">l</span>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">-2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2w</span>
+</i>
+</tt>
+</small>
+</sup>
+ ~<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2</span>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">之间。要用补码来表</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">示这个乘积，可能需要2w位——大多数情况下只需要2w-1位，但是特殊情况2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2w</span>
+</tt>
+</small>
+</sup>
+ —<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sup>
+ 需要2w位 (包括一个符号位0)。然而，C语言中的有符号乘法是通过将2w位的乘积截断为w位的方式实 现的。根据等式（2-10), w位的补码乘法运算*</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">I</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">的结果为：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x*<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">i</span>
+</b>
+</i>
+</small>
+</sup>
+ <sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ y=U2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ ((x-y)mod2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sup>
+ )</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(2-17)</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们认为对于无符号和补码乘法来说，乘法运算的位级表示都是一样的。也就是，给定长度 为W的位向量5和夕，无符号乘积似：</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">B2U<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ {y)</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">的位级表示与补码乘积於r<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ (J)*</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">lB2T<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</small>
+</sub>
+ (y)</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">的位级表示是相同的。这表明机器可以用一种乘法指令来进行有符号和无符号整数的乘法。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">举例说明，图2-26给出了不同3位数字的乘法结果。对于每一对位级运算数，我们执行无 符号和补码乘法，得到6位的乘积，然后再把这些乘积截断到3位。无符号的截断后的乘积总是 等于;mod 8。虽然无符号和补码两种乘法乘积的6位表示不同，但是截断后的乘积的位级表 示都相同。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">模式</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">x'y</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">截断的</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[101]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[011]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">15</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[001111]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">7</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[HI]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[101]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[011]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-9</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[110111]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[HI]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">7</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[HI]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">28</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[011100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">-1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[HI]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[000100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[011]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">[on]</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">9</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[001001]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[001]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[011]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[on]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">9</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[001001]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[001]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-26 3位无符号和补码乘法示例（虽然完整的乘积位级表示相同，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">但是截断后的乘积的位级表示都相同）</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了说明（无符号和补码）乘积的低位是相同的，设;c=527；(3E)和;;=幻7；(刃是这些位模 式表示的补码值，而x'=52C/<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ (30和户52似刃是这些位模式表示的无符号值。根据等式（2-5), 我们有Ax+W和；计算这些值的乘积模2〜得到以下结果：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(x<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">f</span>
+</b>
+</i>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">. /) mod</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">[(x + x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ _<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ 2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+ )</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">• (</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">；</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ ^2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+ )]</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">mod</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">= [x^y + {x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ _<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ y</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sub>
+ -ix)2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">+</span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">mod</span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(2-18)</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</span>
+ <b class="calibre13">
+<span class="calibre4">c • y) mod</span>
+</b>
+ <tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">由于模运算符，所有带有权重2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</small>
+</sup>
+ 的项都丢掉了，因此我们看到JC7和的低w位是相同的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题2.34按照图2-26的格式填写下表，说明不同的3位数字乘法的结果。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">模式</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">y</span>
+</b>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x -y</span>
+</i>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">截断的</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[101]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[100]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[101]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[010]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[in]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[010]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[in]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无符号</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[110]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[110]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">补码</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[110]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">[110]</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">我们可以看出，</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">w</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">位数字上的无符号运算和补码运算是同构的</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">-</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">级上有相同的结果。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4算+ 二、一二、和 +二</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">在位</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">_</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">2.35</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">给你一个任务，开发函数 出。下面是你的解决方案：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Determine whether arguments can be multiplied without overflow */</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">int tmult_ok(int x, int y) { int p = x*y;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Either x is zero, or dividing p by x gives y */</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">return !x I I p/x == y;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">你用x和y的很多值来测试这段代码，似乎都工作正常。你的同事向你挑战，说如果我不能用减 法来检验加法是否溢出（参见练习题2.31),那么你怎么能用除法来检验乘法是否溢出呢？ ”</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">按照下面的思路，用数学推导来证明你的方法是对的。首先，证明x = 0的情况是正确的。另外，考虑 w位数字X U关0)、；；、p和分，这里;7是X和少补码乘法的结果，而0是P除以X的结果。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1•说明x和y的整数乘积X7,可以写成这样的形式•少=；7+/r，其中/关o当且仅当p的计算溢出。 2•说明可以写成这样的形式：p = x •分 + r，其中M&lt;W。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">3•说明0=少当且仅当r = f = 0。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.36对于数据类型int为32位的情况，设计一个版本的tmult_ok函数（见练习题2.35), 要使用64位精度的数据类型long long,而不使用除法。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">XDR库中的安全漏洞</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2002年，人们发现Sun Microsystems公司提供的实现XDR库的代码有安全漏洞，XDR库 是一个广泛使用的程序间共享数据结构的工具，造成这个安全漏洞的原因是程序会在毫无察觉的 情况下产生乘法溢出。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">包含安全漏洞的代码与下面所示类似：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1 /*</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">* Illustration of cod^ vulnerability similar</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">to that</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">found</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">in</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">* Sun's</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">XDR</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">library.</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*/</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">void* copy.elements(void *ele_src[], int</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">element,</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">size</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">t</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">ele_size) {</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Allocate</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">buffer for element objects,</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">each</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">of</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">ele_size</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">bytes</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">* and</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">copy</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">from locations designated</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">by ele_src</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">void ^result = malloc (ele_.cnt * ele_size);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">if (result</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">== NULL)</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">/*</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">malloc failed */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">return NULL;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">void *next</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">= result;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">int i;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">for (i</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">= 0;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">i &lt; element; i++) {</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Copy</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">object i</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">to</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">destination */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">memcpy(next, ele^src[i], ele_size);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/*</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Move</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">pointer</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">to</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">next memory region</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">*/</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">next += ele_size;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">return result;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">為数copy一elements的设计可以将ele一cnt个数据结构复制到第10行的函数分配的缓冲区 中，每个数据结构包含ele_size个字节。需要的字节数是通过计算ele_cnt*ele—size得到的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">想象一下，</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">一</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">个怀有恶意的程序员用参数ele_cnt等于1 048 577 (2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">20</span>
+</tt>
+</small>
+</sup>
+ + 1). ele_size等 于4096 (2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</small>
+</sup>
+ )来调用这个函数。然后第10行上的乘法会溢出，导致只会分配4096个字节</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">而不 是装下这些数据所需要的4 294 971 392个字节。从第16行开始的循环会试图复制所有的字节，超 越已分配的缓冲区的界限，因而破坏了其他的数据结构。这会导致程序崩溃或者行为异常。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">几乎每个操作系统都使用了这段Sun的代码，像Internet Explorer和Kerberos验证系统这样 使用广泛的程序都用到了它。计算机紧急响应组（Computer Emergency Response Team, CERT), 卡内基—梅隆软件工程协会（Carnegie Mellon Software Engineering Institute)运行的一个追踪安 全漏洞或失效的组织，发布了建议“CA-2002-25”，于是许多公司急忙对它们的代码打补丁。幸 运的是，还没有由于这个漏洞引起的安全失效的报告。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">库函数calloc的实现中存在着类似的漏洞。这些已经被修补过了。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.37现在你的任务是修补上述XDR代码中的漏洞。你决定将待分配字节数设置为数据类型</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">long long unsigned,来消除乘法溢出的可能性（至少在32位机器上）。你把原来对malloc函 数的调用（第10行）替换如下：</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">long long unsigned asize =</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">ele_cnt * (long long unsigned) ele_size; void *result = malloc(asize);</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这段代码在原始代码基础上有了哪些改进？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">假设数据类型size_t和unsigned</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">int是一样的，并且都是32位长，你该如何修改代码来消除 这个漏洞？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">乘以常数</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在大多数机器上，整数乘法指令相当慢，需要10个或者更多的时钟周期，然而其他整数运 算（例如加法、减法、位级运算和移位）只需要1个时钟周期。因此，编译器使用了一项重要的 优化，试着用移位和加法运算的组合来代替乘以常数因子的乘法。首先，我们会考虑乘以2的幂 的情况，然后再概括成乘以任意常数。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">设;c为位模式[〜吣，‘_<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ，…，〜]表示的无符号整数。那么，对于任何A:&gt;0,我们都认为 ^^，^^，…，^，(^…，(^给出了“的位级表示，这里右边增加了 A个0。这个属性可以通过等式 (2-1)推导出来：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">W—1</span>
+</b>
+</i>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w+k([.<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ w—b <sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ w—2^ •••，又0，0，•••， °]) 二 D 乂严</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">'</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">i=0</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">'w-1</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">      </span>
+</i>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">-</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">=.2'</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">'</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<i class="calibre15">
+<span class="calibre4">-i=0</span>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">.</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">= x2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</tt>
+</small>
+</sup>
+</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于A&lt;w,我们可以将移位后的位向量截断到长度w,得到…，x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">Q</span>
+</tt>
+</small>
+</sub>
+ ，0，…，0]。根 据等式（2-9),这个位向量的数值为x2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">A</span>
+</tt>
+</small>
+</sup>
+ mod2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sup>
+ = x*：2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">A</span>
+</tt>
+</small>
+</sup>
+ 。因此，对于无符号变量x, C表达 式x«k等价于x*pwr2k,这里pwr2k等于2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</small>
+</sup>
+ 。特别地，我们可以用lU«k来计算pwr2k。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">通过类似的推理，我们可以得出，对于一个位模式为…，;c。]的补码数；c,以及范围 在0 &lt; A:&lt; w内任意的LA:,位模式…，知，0，…，0]就是:的补码表示。因此，对于 有符号变量x, C表达式x«k等价于x * pwr2k,这里pwr2k等于2&amp;。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">注意，无论是无符号运算还是补码运算，乘以2的幂都可能会导致溢出。结果表明，即使溢 出的时候，我们通过移位得到的结果也是一样的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">由于整数乘法比移位和加法的代价要大得多，许多C语言编译器试图以移位、加法和减法 的组合来消除很多整数乘以常数的情况。例如，假设一个程序运含表达式x*14。利用等式14 ==</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">3</span>
+</i>
+</small>
+</sup>
+ + 2<sup class="calibre7">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">2</span>
+</i>
+</small>
+</sup>
+ + 2\</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">编译器会将乘法重写为（x&lt;&lt;3&gt;</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+ (x&lt;&lt;2)</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">+</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">(x&lt;&lt;1),</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">实现了将一个乘法替换为三个 移位和两个加法。无论x是无符号的还是补码，甚至当乘法会导致溢出时，两个计算都会得到 一样的结果。（根据整数运算的属性可以证明这一点。）更好的方法是，编译器还可以利用属性</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">14 = 2<sup class="calibre7">
+<small class="calibre8">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</small>
+</sup>
+ -2<sup class="calibre7">
+<small class="calibre8">
+<b class="calibre13">
+<span class="calibre4">!</span>
+</b>
+</small>
+</sup>
+ ,</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">将乘法重写为（</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">x«4&gt;-(x«l),</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">这时只需要两个移位和一个减法。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">關练习题2.38就像我们将在第3章中看到的那样，LEA指令能够执行形如（a«k)+b的计算，这里 k等于0、1、2或3,而b等于0或者某个程序值。编译器常常用这条指令来执行常.数因子乘法。例如， 我们可以用（a«l)+a来计算3*a。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">考虑b等于0或者等于a、k为任意可能的值的情况，用一条LEA指令可以计算a的哪些倍数？ 归纳一下我们的例子，考虑一个任务，对于某个常数</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">[</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">的表达式</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">x*A</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">：生成代码。编译器会 将</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">ii</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">：的二进制表示表达为一组</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">交替的序列：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[(0…0)(1 …1) (0-0)-(1-1)].</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">例如，</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">14</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">可以写成</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">[(0...0)(111)(0)]</span>
+</b>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">考虑一组从位位置《到位位置</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">m</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">的连续的</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">1 (« &gt; m)o (</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">对于</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">14</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">来说，我们有<sub class="calibre17">
+<small class="calibre8">
+<b class="calibre13">
+<span class="calibre4">W</span>
+</b>
+</small>
+</sub>
+</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">= 3</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">和</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">m=l</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">。）我们可以用下面两种不同形式中的一种来计算这些位对 乘积的影响：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">形式</span>
+</b>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">A:</span>
+</b>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(x«n)</span>
+</b>
+</i>
+ <b class="calibre13">
+<span class="calibre4">+ (x««—1) + ••• + (x«m)</span>
+</b>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">形式</span>
+</b>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">B: (x«n+l) - (x«m)</span>
+</b>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">把每个这样连续的</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">的结果加起来，不用做乘法，我们就能计算出当然，选择使甩 移位、加法和减法的组合，还是使用一条乘法指令，取决于这些指令的相对速度，而这些是与机 器高度相关的。大多数编译器只在需要少量移位、加法和减法就足够的时候才使用这种优化。</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_练习题2.39对于位位置《为最高有效位的情况</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">我们要怎样修改形式B的表达式？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题2.40对于下面每个尺的值，找出只用指定数量的运算表达x*i：的方法，这里我们认为加法 和减法的开销相当。除了我们已经考虑过的简单的形式A和B原则，你可能会需要使用一些技巧。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">K</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">移位</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">加法/减法</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">表达式</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">31</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">一 6</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">55</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">
+<span class="calibre14">議</span>
+</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">练习题2.41对于一组从位位置”开始到位位置m结束的连续的1</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">(n &gt;</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">m),我们看到可以产生两</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">种形式的代码，A和B。编译器该如何决定使用哪一种呢？</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">除以</span>
+</b>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">的幂</span>
+</b>
+</tt>
+</blockquote>
+<span id="filepos0000781362"></span>
+</blockquote>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在大多数机器上，整数除法要比整数乘法更慢——需要30个或者更多的时钟周期。除以2 的幂也可以用移位运算来实现，只不过我们用的是右移，而不是左移。无符号和补码数分别使用 逻辑移位和算术移位来达到目的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">整数除法总是舍入到零。对于;c &gt;0.和广&gt;0,结果是L&lt;y」，这里对于任何实数a, Ld定义 为唯一的整数a’，&lt;</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">a&lt;a<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">f</span>
+</i>
+</tt>
+</small>
+</sup>
+ +U</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">例如，L3.14j=3,卜3.14」=一4,而|_3」=3。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">考虑对一个无符号数执行逻辑右移&amp;位的效果。我们认为这和除以有一样的效果。例如， 图2-27给出了在12 340的16位表示上执行逻辑右移的结果，以及对它执行除以1、2、16和 256的结果。从左端移入的0以斜体表示。我们还给出了如果用真正的运算去做除法得到的结 果。这些示例说明，移位总是舍入到零，这一结果与整数除法的规则一样。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了证明逻辑右移和除以2的幂之间的关系，设x为位模式[〜4〜_<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ，…，M表示的无符号 整数，而*的取值范围为0&lt;^&lt; w。设X’为w—H立的位表示[工^，‘_<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ，…，;cj的无符号数，而;c" 为H立的位表示[义^，…，;c<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ ]的无符号数。我们有Y = L^」。证明如下：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">根据等式（2-1),我们有$ = 1:= 4，, =</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">和广=</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">因此，我们可</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">以把;c写为;c =</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">V+x"。可以观察到</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">,,(</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">32</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">,.=</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">(-</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">,因此</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">&lt;x"&lt;^ 这意(**1^2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">&amp;</span>
+</tt>
+</small>
+</sup>
+ 」=0。 因此，b#」</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">=lx'+x<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">u</span>
+</i>
+</tt>
+</small>
+</sup>
+ /2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</tt>
+</small>
+</sup>
+ j</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">[x<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">f,</span>
+</i>
+</tt>
+</small>
+</sup>
+ /2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</tt>
+</small>
+</sup>
+ j=</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">分。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对位向量[Xh，〜_<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ，…，x。]逻辑右移</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">k</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">位会得到位向量</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[0，“*，0，</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">X<sub class="calibre17">
+<small class="calibre8">
+<i class="calibre15">
+<span class="calibre4">w</span>
+</i>
+</small>
+</sub>
+ -i,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">X<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ _2，".，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个位向量有数值X'。因此，对于无符号变量；c, C表达式x»k等价于<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">x</span>
+</tt>
+</small>
+</sub>
+ /pwr2k,这里pwr2k 等价于.</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">»k (二进制）</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">12340/2<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">0011000000110100</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">12340</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">12340.0</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">0001100000011010</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6170</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">6170.0</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">001100000011</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">771</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">771.25</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">00^^000110000</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">48</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">48.203125</span>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-27无符号数除以2的幂</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">现在考虑对一个补码数进行算术右移的结果。对于一个正整数，最高有效位为0,所以效果 与逻辑右移是一样的。因此，对于非负数来说，算术右移&amp;位与除以2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">A</span>
+</tt>
+</small>
+</sup>
+ 是一样的。作为一个负 数的例子，图2-28给出了对-12 340的16位表示进行算术右移不同位数的结果。正如我们能看 到的，结果与除以2的幂几乎完全一样。对于不需要舍入的情况a =i),结果是正确的。但是 当需要进行舍入时，移位导致结果向下舍入，而不是像规则需要的那样向零舍入。例如，表达 式-7/2应该得到-3,而不是-4。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">»k</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">(二进制）</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-i2340/2<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">k</span>
+</b>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1100111111001100</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12340</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12340.0</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">7110011111100110</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-6170</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-6170.0</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">7777110011111100</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">—772</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-771.25</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">8</span>
+</tt>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">""""11001111</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-49</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-48.203125</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-28进行算术右移</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">让我们更好地理解算术右移的效果，以及如果利用它来执行除以2的幂。设;c为位模式 …，;c<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ ]表示的补码整数，而A：的取值范围为0 &lt; A:&lt; W。设f为W—H立(Xv-1，…， 表示的补码数，而X”为低A位[&amp;+…，；C。]表示的无符号数。与分析无符号情况类似，我们 有;C = 2V+JC”，而0&lt;x”&lt;f,得到;c’ = |_W」。进一步，可以观察到，算术右移位向量 x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ _<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ，…，</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">0</span>
+</i>
+</tt>
+</small>
+</sub>
+ ] k</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">位，得到位向量</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">IXv-l,…，<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</i>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">w-\<sup class="calibre31">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">f X</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ w-lf <sup class="calibre31">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">x</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ w-2f*** f <sup class="calibre31">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">X</span>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+ kl</span>
+</i>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它刚好就是将X<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">w</span>
+</tt>
+</small>
+</sub>
+ _<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ , •••, xj从位符号扩展到w位。因此，这个移位后的位向量就 是LW」的补码表示。这个分析证实了我们从图2-28的示例中发现的结论。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于；0 0，或是不需要舍入的时候U” = 0)，我们的分析表明这个移位的结果就是所期望 的值。不过，对于；c&lt;0和;;&gt;0,整数除法的结果应该是[V/|,这里，对于任何实数a, M被 定义为使得〃’-的唯一整数V。也就是说，整数除法应该将为负的结果向上朝零舍入。 因此，当有舍入发生时，将一个负数右移A位不等价于把它除以这个分析也证实了我们从图 2-28的示例中发现的结论。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们可以在移位之前“偏置”（biasing)这个值，通过这种方法修正这种不合适的舍入。 这种技术利用的属性是：对于整数;c和任意少&gt;0的;;，有[yyl = L0c + 7-l)O」。例如，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">{^r</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">当 JC = 一30 且;;=4,我们有;C+3； — 1=—27,而「一30/41 = —7 = L—27/4」。当 x = —32 且少<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">=</span>
+</tt>
+</small>
+</sub>
+ 4 时， 我们有x + ;； - 1 = -29,而「-32/41 = 一8 =[_-29/4」。通用的方式表达这个关系，假设jc =紗+ r, 这里</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">%3\ (x+y— l)ly-k+{r^y— \)ly<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">9</span>
+</i>
+</tt>
+</small>
+</sub>
+</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">因此LOc+火一 l)/xJ=灸+ L(<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">r+</span>
+</tt>
+</small>
+</sup>
+ 少一 1)4」。当 r = 0</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">时，后面一项等于0,而当r&gt;0时，等于1。也就是说，通过给;c增加一个偏量7-1，然后再 将除法向下舍入，当y整除JC时，我们得到t否则，就得到灸+1。因此，对于；c&lt;0,如果在 右移之前，先将jc加上2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</small>
+</sup>
+ -1,那么我们就会得到正确舍入的结果了。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">这个分析表明对于使用算术右移的补码机器，C表达式</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(x&lt;0 ? (x + (l«k) — 1)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">:</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">x)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">»</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">k</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">等价于x/pwr2k,这里pwr2k等于2<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</small>
+</sup>
+ 。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-29说明在执行算术右移乏前加上一个适当的偏量是如何导致结果正确舍人的。在第3列, 我们给出了-12 340加上偏量值之后的结果，</span>
+</tt>
+ <tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">低k位</span>
+</i>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">(那些会向右移出的位）以斜体表示。我们可 以看到，低a：位左边的位可能会加1,也可能不会加1。对于不需要舍入的情况a=i)，加上偏量 只影响那些被移掉的位。对于需要舍入的情况，加上偏量导致较高的位加1,所以结果会向零舍入。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">k</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">偏量</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12 340</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">+偏量</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">»k (</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">二进制）</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">十进制</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12340/2<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<b class="calibre13">
+<span class="calibre4">k</span>
+</b>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1100111111001100</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1100111111001100</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12340</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-12340.0</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1100111111001107</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">7110011111100110</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-6170</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">一</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">6170.0</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">15</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1100111111017077</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">""110011111101</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-771</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">—771.25</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">8</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">255</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">11010000</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">"卯厕</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<i class="calibre15">
+<span class="calibre4">linuunomoo</span>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-48</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-48.203125</span>
+</b>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图2-29补码除以2的幂（右移之前加上一个偏量，结果向零舍入）</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">®练习题2.42写&gt;一个函数divl6,对于整数参数x返回x/16的值。你的函数不能使用除法、模运 算、乘法、任何条件语句（if或者？：）、任何比较运算符（例如 &lt;、&gt;或==)或任何循环。你可以假 设数据类型int是32位长，使用补码表示，而右移是算术右移。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">现在我们看到，除以2的幂可以通过逻辑或者算术右移来实现。这也正是为什么大多数机器 上提供这两种类型的右移。不幸的是，这种方法不能推广到除以任意常数。同乘法不同，我们不 能用除以2的幂的除法来表示除以任意常数[的除法。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<tt class="calibre3">
+<span class="calibre4">®练习题2.43在下面的代码中，我们省略了常数M和N的定义：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define M</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Mystery number 1</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre28">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define N</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Mystery number 2</span>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre27">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int arith(int x, int y) { int result = 0;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">result = x*M + y/N; /氺 M and N are mystery numbers. */ return result;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">我们以某个M和N的值编译这段代码。编译器用我们讨论过的方法优化乘法和除法。下面是将产生出 的机器代码翻译回C语言的结果：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">/*</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Translation of assembly code for arith */ int optarith(int x, int y)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">i</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int t = x; x &lt;&lt;: 5; x -= t;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if Cy &lt; 0) y += 7;</span>
+</b>
+</tt>
+</span>
+</p>
+</body>
+</html>

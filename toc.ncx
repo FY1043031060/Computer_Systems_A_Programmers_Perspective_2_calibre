@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="zho">
+  <head>
+    <meta content="82967b30-0ea1-45e2-9be9-bf681c06a8b5" name="dtb:uid"/>
+    <meta content="2" name="dtb:depth"/>
+    <meta content="calibre (3.37.0)" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>深入理解计算机系统</text>
+  </docTitle>
+  <navMap>
+    <navPoint class="chapter" id="num_1" playOrder="1">
+      <navLabel>
+        <text>第1章计算机系统漫游      1</text>
+      </navLabel>
+      <content src="text/part0000_split_001.html#filepos0000190684"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_2" playOrder="2">
+      <navLabel>
+        <text>1.1信息就是位+上下文      1</text>
+      </navLabel>
+      <content src="text/part0000_split_001.html#filepos0000195526"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_3" playOrder="3">
+      <navLabel>
+        <text>系统的硬件组成……             5</text>
+      </navLabel>
+      <content src="text/part0000_split_001.html#filepos0000235889"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_4" playOrder="4">
+      <navLabel>
+        <text>1.5高速缓存至关重要      7</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000245520"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_5" playOrder="5">
+      <navLabel>
+        <text>.1,6存储设备形成层次结构      9</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000252147"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_6" playOrder="6">
+      <navLabel>
+        <text>1.8系统之间利用网络通信      13</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000278935"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_7" playOrder="7">
+      <navLabel>
+        <text>参考文献说明      80</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000304704"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_8" playOrder="8">
+      <navLabel>
+        <text>第2章信息的表示和处理      20</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000307377"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_9" playOrder="9">
+      <navLabel>
+        <text>2.1信息存储            22</text>
+      </navLabel>
+      <content src="text/part0001_split_000.html#filepos0000319179"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_10" playOrder="10">
+      <navLabel>
+        <text>数据大小            25</text>
+      </navLabel>
+      <content src="text/part0001_split_001.html#filepos0000359130"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_11" playOrder="11">
+      <navLabel>
+        <text>2.1.7布尔代数简介      32</text>
+      </navLabel>
+      <content src="text/part0001_split_001.html#filepos0000422001"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_12" playOrder="12">
+      <navLabel>
+        <text>C语言中的位级运算      34</text>
+      </navLabel>
+      <content src="text/part0001_split_001.html#filepos0000447020"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_13" playOrder="13">
+      <navLabel>
+        <text>C语言中的逻辑运算      36</text>
+      </navLabel>
+      <content src="text/part0001_split_001.html#filepos0000466390"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_14" playOrder="14">
+      <navLabel>
+        <text>整数运算            54</text>
+      </navLabel>
+      <content src="text/part0002_split_001.html#filepos0000684780"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_15" playOrder="15">
+      <navLabel>
+        <text>2.3.7除以2的幂                         64.</text>
+      </navLabel>
+      <content src="text/part0003_split_000.html#filepos0000781362"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_16" playOrder="16">
+      <navLabel>
+        <text>浮点数……                  61</text>
+      </navLabel>
+      <content src="text/part0003_split_001.html#filepos0000813233"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_17" playOrder="17">
+      <navLabel>
+        <text>二进制小数                   68</text>
+      </navLabel>
+      <content src="text/part0003_split_001.html#filepos0000816239"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_18" playOrder="18">
+      <navLabel>
+        <text>C语言中的浮点数      77</text>
+      </navLabel>
+      <content src="text/part0004_split_000.html#filepos0000923117"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_19" playOrder="19">
+      <navLabel>
+        <text>练习题答案      90</text>
+      </navLabel>
+      <content src="text/part0004_split_000.html#filepos0001011793"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_20" playOrder="20">
+      <navLabel>
+        <text>程序编码                              】05</text>
+      </navLabel>
+      <content src="text/part0005_split_000.html#filepos0001193956"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_21" playOrder="21">
+      <navLabel>
+        <text>访问信息      …112</text>
+      </navLabel>
+      <content src="text/part0005_split_000.html#filepos0001251507"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_22" playOrder="22">
+      <navLabel>
+        <text>加载有效地址             JI8</text>
+      </navLabel>
+      <content src="text/part0005_split_001.html#filepos0001330693"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_23" playOrder="23">
+      <navLabel>
+        <text>移位操作……      !20</text>
+      </navLabel>
+      <content src="text/part0005_split_001.html#filepos0001346367"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_24" playOrder="24">
+      <navLabel>
+        <text>家庭作业      洲</text>
+      </navLabel>
+      <content src="text/part0009_split_001.html#filepos0002323438"/>
+    </navPoint>
+  </navMap>
+</ncx>

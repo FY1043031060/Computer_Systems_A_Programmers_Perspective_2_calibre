@@ -1,0 +1,7031 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>未知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body class="calibre">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/race.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define N 4</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void *thread(void *vargp); int mainO</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pthread_t tid[N]; int i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; N; i++)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Pthread_create(fetid[i], NULL, thread, &amp;i); for (i = 0; i &lt; N; i++)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Ptliread_ j oin (tid [i] , NULL);</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/* Thread routine</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void *thread(void *vargp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int myid = *((int *)vargp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("Hello from thread %d\n", myid);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return NULL;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/race.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图12-40 —个带竞争的程序</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了消除竞争，我们可以动态地为每个整数</span>
+</tt>
+ <span class="calibre4">ID</span>
+ <tt class="calibre3">
+<span class="calibre4">分配一个独立的块，并且传递给线程例程一 个指向这个块的指针，如图</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">12-41</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">所示（第</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">12</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">〜</span>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">14</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">行)。请注意线程例程必须释放这些块以避 免存储器泄漏。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">当在系统上运行这个程序后，我们现在得到了正确的结果：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">unix&gt;</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">./norace</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Hello</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">from thread</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Hello</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">from thread</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Hello</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">from thread</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Hello</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">from thread</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">3</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">练习题</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">12.13在图</span>
+</tt>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">12.41</span>
+</tt>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">_</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">我们可能想要在主线程中的第15行后立即释放已分配的存储器块，而</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">不是在对等线程中释放它。但是这会是个坏注意。这是为什么？</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">®练习题12.14 A.在图12.41中，我们通过为每个整数ID分配一个独立的块来消除竞争。给出一个不 调用</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">malloc</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">或</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">free</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">函数的不同的方法。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">B.这种方法的利弊是什么？</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">；</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/norace. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00251.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#define N 4</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void *thread(void *vargp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int mainO</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pthread一t tid[N]; int i</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*ptr;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; N; i++) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">ptr = Malloc(sizeof(int));</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">*ptr = i;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Pthread_create(fetid[i], NULL, thread, ptr);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i = 0; i &lt; N; i++)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Pthread_join(tid[i]</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">NULL); exit(0);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">A Thread routine */ void *thread(void *vargp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int myid = *((int *)vargp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Free(vargp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("Hello from thread %d\n"</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">myid); return NULL;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/norace. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">12-41</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">12-40</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">中程序的一个没有竞争的正确版本</span>
+</b>
+</tt>
+ <b class="calibre13">
+<span class="calibre4">12.7.5</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">死锁</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">信号量引入了一种潜在的令人厌恶的运行时错误</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">叫做死锁</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（deadlock),它指的是一组线 程被阻塞了，等待一个永远也不会为真的条件。进度图对于理解死锁是一个无价的工具。例如, 图12-42展示了一对用两个信号量来实现互斥的线程的进度图。从这幅图中，我们能够得到一些 关于死锁的重要知识：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•程序员使用P和F操作顺序不当</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">以至于两个信号量的禁止区域重叠。如果某个执行轨迹 线碰巧到达了死</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">锁状态</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">rf,</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">那么就不可能有进一步的进展了，因为重叠的禁止区域阻塞了 每个合法方向上的进展。换句话说，程序死锁是因为每个线程都在等待其他线程执行一个 根本不可能发生的K操作。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•重叠的禁止区域引起了一组称为死</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">锁区域</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">（deadlockregion)的状态。如果一个轨迹线碰巧 到达了一个死锁区域中的状态，那么死锁就是不可避免的了。轨迹线可以进入死锁区域, 但是它们不可能离开。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">。死锁是一个相当困难的问题，因为它不总是可预测的。一些幸运的执行轨迹线将绕开死锁 区域，而其他的将会陷入这个区域。图12-42展示了每种情况的一个示例。对于程序员来 说，这其中隐含的着实令人惊慌。你可以运行一个程序1000次不出任何问题，但是下一 次它就死锁了。或者程序在一台机器上可能运行得很好，但是在另外的机器上就会死锁。 最糟糕的是，错误常常是不可重复的，因为不同的执行有不同的轨迹线。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">程序死锁有很多原因，要避免死锁一般而言是很困难的。然而，当使用二元信号量来实现互</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">斥时，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">如图12-42所示，你可以应用下面的简单而有效的规则来避免死锁</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">：</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">互斥锁加锁顺序规则：</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">如果对于程序中每对互斥锁</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">0,</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">每个同时占用</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">s</span>
+</b>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和/的 线程都按照相同的顺序对它们加锁，那么这个程序就是无死锁的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">例如，我们可以通过这样的方法来解决图12-42中的死锁问题：在每个线程中先对</span>
+</tt>
+ <span class="calibre4">*9</span>
+ <tt class="calibre3">
+<span class="calibre4">加锁</span>
+</tt>
+ <span class="calibre4">,</span>
+ <tt class="calibre3">
+<span class="calibre4">然后再对</span>
+</tt>
+ <span class="calibre4">/</span>
+ <tt class="calibre3">
+<span class="calibre4">加锁。图12-43展示了得到的进度图。</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">无死锁的轨迹</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">咋</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">)</span>
+</b>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Vit)</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P{s)</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">死锁状态</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">?</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">的禁止区</span>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td rowspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">初始</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">J=1</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">t=l</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Pit)'</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td colspan="2" class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<span class="calibre4">L</span>
+</tt>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">死锁区</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="3" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<sup class="calibre7">
+<small class="calibre8">
+<span class="calibre30">
+<tt class="calibre3">
+<span class="calibre4">k</span>
+</tt>
+</span>
+</small>
+</sup>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">有死锁的轨迹线</span>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td colspan="2" class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">•..</span>
+</b>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">...</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">p(t)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">• • •</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">• • •</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">m</span>
+</b>
+</i>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="-18pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">®练习题</span>
+</b>
+</tt>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">12.15</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">思考下面的程序，它试图使用一对信号量来实现互斥。 初始时：s<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</tt>
+</span>
+</small>
+</sup>
+ l，t=0。</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">12-42</span>
+</b>
+</span>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">—个有死锁程序的进度图</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程2</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00252.jpeg" class="calibre5"/>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">;</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">;</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">NIy \ly z-s \ly</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">s s t t</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/IV /l\ ✓Ix rx</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">p V p V</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">\J/ \l/ NJy</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">s s t t</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">/IN /IX</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">p V p V</span>
+</tt>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">画出这个程序的进度图。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">它会总是死锁吗？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果是，那么对初始信号量的值做哪些简单的改变就能消除这种潜在的死锁呢？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">画出得到的无死锁程序的进度图。</span>
+</tt>
+</p>
+<span id="filepos0006803538"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">12.8</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">小结</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">一个并发程序是由在时间上重叠的一组逻辑流组成的</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">。•在</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这一章中，我们学习了三种不同的 构建并发程序的机制：进程、I/O多路复用和线程。我们以一个并发网络服务器作为贯穿全章的 应用程序。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">进程是由内核自动调度的，而且因为它们有各自独立的虚拟地址空间，所以要实现共享数 据，必须要有显式的n&gt;c机制。事件驱动程序创建它们自己的并发逻辑流，这些逻辑流被模型 化为状态机，用I/O多路复用来显式地调度这些流。因为程序运行在一个单一进程中，所以在流 之间共享数据速度很快而且很容易。线程是这些方法的综合。同基于进程的流一样，线程也是由 内核自动调度的。同基于I/O多路复用的流一样，线程是运行在一个单一进程的上下文中的，因 此可以快速而方便地共享数据。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">无论哪种并发机制，同步对共享数据的并发访问都是一个困难的问题。提出对信号量的P 和r操作就是为了帮助解决这个问题。信号量操作可以用来提供对共享数据的互斥访问，也对 诸如生产者-消费者程序中有限缓冲区和读者一写者系统中的共享对象这样的资源访问进行调 度。一个并发预线程化的echo服务器提供了信号量使用场景的很好的例子。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">并发也引入了其他一些困难的问题。被线程调用的函数必须具有一种称为线程安全的属性。 我们定义了四类线程不安全的函数，以及一些将它们变为线程安全的建议。可重入函数是线程安 全函数的一个真子集，它不访问任何共享数据。可重入函数通常比不可重入函数更为有效，因为 它们不需要任何同步原语。竞争和死锁是并发程序中出现的另一些困难的问题。当程序员错误地 假设逻辑流该如何调度时，就会发生竞争。当一个流等待一个永远不会发生的事件时，就会产生 死锁<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</small>
+</sub>
+</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">参考文献说明</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">信号量操作是Dijkstra提出的[37]。进度图的概念是Coffinan[24]提出的，后来由Carson 和Reync)ld<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">S</span>
+</tt>
+</small>
+</sub>
+ [17]形式化的。Courtois等人[31]提出了读者-写者问题。操作系统教科书更详细 地描述了经典的同步问题，例如哲学家进餐问题、打瞌睡的理发师问题和吸烟者问题[98, 104, 112]。Butenhof的书[16]对Posix线程接口有全面的描述。Birrell[7]的论文对线程编程以及线 程编程中容易遇到的问题做了很好的介绍。Reinders的书[86]描述了 C/C++库，简化了线程化 程序的设计和实现。有一些课本讲述了多核系统上并行编程的基础知识[50, 67]。Pugh描述了 Java线程通过存储器进行交互的方式的缺陷，并提出了替代的存储器模型[84]。Gustafson提出 了替代强扩展的弱扩展加速模型[46]。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">家庭作业</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">12.16</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">12.17</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">编写hello.c (见图12-13)的一个版本，它创建和回收《个可结合的对等线程，其中《是一个命 令行参数。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图12-44中的程序有一个bug。要求线程睡眠一秒钟，然后输出一个字符串。然而，当在我们的 系统上运行它时，却没有任何输出。这是为什么？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">你可以通过用两个不同的Pthreads函数调用中的一个替代第9行中的exit函数来改正这个错 误。选择哪一个呢？</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/hellobug. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">'i #include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void <sup class="calibre23"><span id="filepos0006808735"></span>
+ <small class="calibre8">
+<a href="part0029.html#filepos0006954591">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">18</span>
+</b>
+</tt>
+</span>
+</a>
+</small>
+</sup>
+ thread(void *vaxgp);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">'3</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int mainO</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">i</span>
+</i>
+</tt>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">：</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.-</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pthread_t tid;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">7</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Pthread_create(fetid, NULL, thread, NULL);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">/* Thread routine</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">*/</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void *thread(void *vaxgp)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Sleep(1);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("Hello, world!\n"); return NULL;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">= 12.18</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">*12.19</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">*</span>
+</tt>
+</span>
+ <b class="calibre13">
+<span class="calibre4">12.20</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">112.21</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">&lt;</span>
+</tt>
+</span>
+ <b class="calibre13">
+<span class="calibre4">12.22</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">c 12.23</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">*12.25在图12-28中的预钱程化的并发echo服务器中，每个线程都调用echo_cnt函数（见图12-29)。 echo—cnt是线程安全的吗？它是可重入的吗？为什么是或为什么不是呢？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">12.26用加锁-拷贝技术来实现gethostbyname的一个线程安全而又不可重入的版本，称为 gethostbyname_tSo 一个正确的解答是使用由互斥锁保护的hostent结构的深层拷贝。 **12.27 —些网络编程的教科书建议用以下的方法来读和写套接字：和客户端交互之前，在同一个打开的巳 连接套接字描述符上，打开两个标准I/O流，一个用来读，一个用来写：</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">FILE <sup class="calibre23"><span id="filepos0006812353"></span>
+ <small class="calibre8">
+<a href="part0029.html#filepos0006959121">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">19</span>
+</b>
+</tt>
+</span>
+</a>
+</small>
+</sup>
+ fpin, *fpout;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fpin = fdopen(sockfd, "r"); fpout = fdopen(sockfd, "w");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">当服务器完成和客户端的交互之后，像下面这样关闭两个流：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fclose(fpin); fclose(fpout);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">然而，如果你试图在基于线程的并发服务器上尝试这种方式，你将制造一个致命的竞争条件。请解释。 *12.28在图12-43中，将两个P操作的顺序交换，对程序死锁是否有影响？通过画出四种可能情况的进度 图来证明你的答案：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">情况1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">情况2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">情况3</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td colspan="2" class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">情况4</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">PCs)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">PCt)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">v(t)</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">v(t)</span>
+</b>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">c b b C</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">✓IN /IN /!&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">a b b c c a p p V p V V</span>
+</tt>
+</span>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">线程3:</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(a);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(c)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(c)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(b);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(b)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(c)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(b);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(b)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(b)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(c);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(c)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(a)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(c);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">P(a)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(a)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(a);</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(a)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+<td class="calibre21">
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">V(b)</span>
+</b>
+</tt>
+</span>
+</p>
+</td>
+</tr>
+</table>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">12.30考虑下面这个会死锁的程序。 初始时：a=l, b=l, c=l. 线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">列出每个线程同时占用的一对互斥锁。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">如果a&lt;ZKc,那么哪个线程违背了互斥锁加锁顺序规则？</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">对于这些线程，指出一个新的保证不会发生死锁的加锁顺序。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">实现标准I/O函数fgets的一个版本，叫做tfgets,假如它在5秒之内没有从标准输入上接收 到一个输入行</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">那么就超时，并返回一个NULL指针。你的函数应该实现在一个叫做tfgets- proc.c的包中，使用进程、信号和非本地跳转。它不应该使用Unix的alarm函数。使用图 12-45中的驱动程序测试你的结果。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.31</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.32</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.33</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">使用select函数来实现练习题12.31中tfgets函数的一个版本。你的函数应该在一个叫做 tfgets-select.c的包中实现。用练习题12.31中的驱动程序测试你的结果。你可以假定标准输 入被赋值为描述符</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">实现练习题12.31中tfgets函数的一个线程化的版本。你的函数应该在一个叫做tfgets- thread.c的包中实现。用练习题12.31中的驱动程序测试你的结果。</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">=</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/tfgets-main. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char fgets(char *s, int size, FILE *stream);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int mainO</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">char buf[MAXLINE];</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<span class="calibre4">8</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if (tfgets(buf,</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">MAXLINE, stdin) == NULL)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("BOOM!\n")；</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">else</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">printf("%s", buf);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">13</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(O);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/conc/tfgets-main. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">图12-45家庭作业题12.31〜12.33的驱动程序</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.34</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.35</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.36</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">12.37</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">H 12.38 12.39</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">编写一个WXM矩阵乘法核心函数的并行线程化版本。比较它的性能与顺序的版本的性能。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">实现一个基于进程的TINY Web服务器的并发版本。你的解答应该为每一个新的连接请求创建一个 新的子进程。使用一个实际的Web浏览器来测试你的解答。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">实现一个基于</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">VO</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">多路复用的UNYWeb服务器的并发版本。使用一个实际的浏览器来测试你的解答。 实现一个基于线程的TINYWeb服务器的并发版本。你的解答应该为每一个新的连接请求创建一个 新的线程。使用一个实际的浏览器来测试你的解答。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">实现一个TINYWeb服务器的并发预线程化的版本。你的解答应该根据当前的负载，动态地增加或 减少线程的数目。一个策略是当缓冲区变满时，将线程数量翻倍，而当缓冲区变为空时，将线程数 目减半。使用一个实际的浏览器来测试你的解答。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Web代理是一个在Web服务器和浏览器之间扮演中间角色的程序。浏览器不是直接连接服务器以 获取网页，而是与代理连接，代理再将请求转发给服务器。当服务器响应代理时</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">代理将响应发送 给浏览器。为了这个试验</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">请你编写一个筒单的可以过滤和记录请求的Web代理：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在试验的第一部分中</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">你要建立以接收请求的代理</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">分析HTTP,转发请求给服务器，并且返回 结果给浏览器。你的代理将所有请求的URL记录在磁盘上一个日志文件中，同时它还要阻塞所 有对包含在磁盘上一个过滤文件中的URL的请求。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在试验的第二部分中</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">你要升级代理，它通过派生一个独立的线程来处理每一个请求，使得代理 能够一次处理多个打开的连接。当你的代理在等待远程服务器响应一个请求使它能服务于一个浏 览器时</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">，</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">它应该可以处理来自另一个浏览器未完成的请求。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">使用一个实际的浏览器来检验你的解答。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">练习题答案</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">当父进程派生子进程时，它得到一个巳连接描述符的副本，并将相关文件表中的引用计数从</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">增加到</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。当父进程关闭它的描述符副本时，引用计数就从</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">减少到</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。因为内核不会关闭一个文件，直 到文件表中它的引用计数值变为零，所以子进程这边的连接端将保持打开。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">当一个进程因为某种原因终止时，内核将关闭所有打开的描述符。因此，当子进程退出时， 它的巳连接文件描述符的副本也将被自动关闭。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.3回想一下，如果一个从描述符中读一个字节的请求不会阻塞，那么这个描述符就准备好可以 读了。假如EOF在一个描述符上为真，那么描述符也准备好可读了，因为读操作将立即返回一个零返回 码，表示EOF。因此，键入Ctrl-d会导致select函数返回，准备好的集合中有描述符0。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.4因为变量pool.reacLset既作为输入参数也作为输出参数，所以我们在每一次调用 select之前都重新初始化它。在输入时，它包含读集合。在输出时，它包含准备好的集合。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.5因为线程运行在同一个进程中，它们都共享相同的描述符表。无论有多少线程使用这个巳连 接描述符，这个已连接描述符的文件表的引用计数都等于</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。因此，当我们用完它时，一个close操作就 足以释放与这个巳连接描述符相关的存储器资源了。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">6</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这里的主要的思想是，栈变量是私有的，而全局和静态变量是共享的。诸如cnt这样的静态 变量有点小麻烦，因为共享是限制在它们的函数范围内的——在这个例子中，就是线程例程。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">A.下面就是这张表：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">变量实例</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">被主线程引用？</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">被对等线程</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">引用?</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">被对等线程</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">引用？</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">Ptr</span>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">cnt</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">i .m</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">msgs.m</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">myid.pO</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">myid.pl</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">否</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">是</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">说明：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•ptr： 一个被主线程写和被对等线程读的全局变量。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•cnt: —个静态变量，在存储器中只有一个寒例，被两个对等线程读和写。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•i.m: —个存储在主线程栈中的本地自动变量。虽然它的值被传递给对等线程，但是对等线程也绝不 会在栈中引用它，因此它不是共享的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">•msgs.m： 一个存储在主线程栈中的本地自动变量，被两个对等线程通过ptr间接地引用。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">myid.</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和myid.</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">: —个本地自动变量的实例，分别驻留在对等线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">和线程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">的栈中。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">B•变量ptr、cnt和msgs被多于一个线程引用，因此它们是共享的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.7这里的重要思想是，你不能假设当内核调度你的线程时，会如何选择顺序。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">变量cnt最终有一个不正确的值</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12.8</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这道题简单地测试你对进度图中安全和不安全轨迹线的理解。像A和C这样的轨迹线绕开了 临界区，是安全的，会产生正确的结果。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">H<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">h</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ L<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">h</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ U<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">h</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ S<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">h</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ H<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2f</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">L<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</small>
+</sub>
+ ,</span>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">U<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2i</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ S<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+</span>
+</b>
+</i>
+</span>
+ <span class="calibre2">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">，</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">T<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2i</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ T<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">x</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">：安全的</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">fh,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">[</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Hi’ Li,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">"</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">T\,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">"</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">’</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">»</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">丁</span>
+</i>
+</tt>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">：不安全的</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Hi,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">"</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">’</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">L</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">2，</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">"</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">,</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，"</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，*^</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，『</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">^2</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">：安全的</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.9</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">p=h</span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">c=h</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">«&gt;1:是，互斥锁是需要的，因为生产者和消费者会并发地访问缓冲区。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">^=l,</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">c=l, «=1:不是，在这种情况中不需要互斥锁信号量，因为一个非空的缓冲区就等于满的缓 冲区。当缓冲区包含一个项目时，生产者就被阻塞了。当缓冲区为空时，消费者就被阻塞了。所以 在任意时刻，只有一个线程可以访问缓冲区，因此不用互斥锁也能保证互斥。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">p&gt;l,</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Oh</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">«=1:不是，在这种情况下</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">也不需要互斥锁，原因与前面一种情况相同。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12.10</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">假设一个特殊的信号量实现为每一个信号量使用了一个LIFO的线程栈。当一个线程在尸操 作中阻塞在一个信号量上，它的ID就被压入栈中。类似地，r操作从栈中弹出栈顶的线程ID,并重启这个 线程。根据这个栈的实现，一个在它的临界区中竞争的写者会简单地等待，直到在它释放这个信号量之前 另一个写者阻塞在这个信号量上。在这种场景中，当两个写者来回地传递控制权时，正在等待的读者可能 会永远地等待下去。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">注意，虽然用FIFO队列而不是用LIFO更符合直觉，但是使用LIFO的栈也是对的，而且也没有违反 P和F操作的语义。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12.11</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">这道题简单地检查你对加速比和并行效率的理解：</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">线程o)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">核</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(P)</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">4</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">运行时间（2；)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">12</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">8</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">6</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">加速比</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">CS<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P</span>
+</b>
+</i>
+</span>
+</small>
+</sub>
+ )</span>
+</b>
+</i>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">1.5</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">效率（&amp;)</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">100%</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">75%</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">50%</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">12.12</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">ctime_ts函数不是可重入函数，因为每次调用都共享相同的由gethostbyname函数返回</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的static变量。然而，它是线程安全的，因为对共享变量的访问是被/&gt;和厂操作保护的，因此是互斥的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.13如果在第15行调用了 pthreacLcreate之后，我们立即释放块，那么我们将引入一个新</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">的竞争，这次竞争发生在主线程对free的调用和线程例程中第25行的赋值语句之间。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.14 A.另一种方法是直接传递整数i,而不是传递一个指向i的指针：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">for (i : 0; i &lt; N; i++)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Pthread_create(fetid[i], NULL, thread, (void *)i);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在线程例程中，我们将参数强制转换成一个int类型，并将它赋值给myid:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int myid = (int) vargp;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">B.优点是它通过消除对malloc和free的调用降低了开销。一个明显的缺点是，它假设指针至少和 int —样大。即便这种假设对于所有的现代系统来说都为真，但是它对于那些过去遗留下来的或今 后的系统来说可能就不为真了。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">练习题12.15 A.原始的程序的进度图如图12-46所示。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">因为任何可行的轨迹最终都陷入死锁状态中，所以这个程序总是会死锁。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">为了消除潜在的死锁，将二元信号量t初始化为</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">1</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">而不是</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">改正后的程序的进度图如图12-47所示。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00253.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">•..</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">• •.</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">...</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P(t)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">. • •</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">V(t)</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">图12-46</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">—个有死锁的程序进度图</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00254.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">m</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1"><img src="../images/00255.jpeg" class="calibre5"/>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">W</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">■5 = 1</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">-</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">线程</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">1</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">P(s)</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">• •.</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">V(s)</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">P(t)</span>
+</i>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">12-47</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">改正后的无死锁的程序的进度图</span>
+</b>
+</tt>
+</p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p class="calibre9" style="margin:0pt; border:0pt; height:1em"> </p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">附录</span>
+</tt>
+</span>
+ <span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">A|</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<span class="calibre4">Computer Systems : A Programmer' s Perspective, 2E</span>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">错误处理</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">程序员应该总是检查系统级函数返回的错误代码。有许多细微方式导致错误的出现，只有使 用内核能够提供给我们的状态信息才能理解为什么有这样的错误。不幸的是，程序员往往不愿意 进行错误检査，因为这使他们的代码变得很庞大，将一行代码变成一个多行的条件语句。错误检 查也是很令人迷惑的，因为不同的函数以不同的方式表示错误。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">在编写本书时，我们面临类似的问题。一方面，我们希望我们的代码示例阅读起来简洁明 了 ；另一方面，我们又不希望给学生们一个错误的印象，以为可以省略错误检查。为了解决这些 问题，我们釆用了一种基于錯误处理包装函数（error-handle wrapper)的方法，这是由W.Richard Stevens在他的网络编程教材[109]中最先提出的。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">其思想是，给定某个基本的系统级函数foo，我们定义一个有相同参数、只不过开头字母大 写了的包装函数Foo。包装函数调用基本函数并检査错误。如果包装函数发现了错误，那么它 就打印一条信息并终止进程。否则，它返回到调用者。注意，如果没有错误，包装函数的行为与 基本函数完全一样。换句话说，如果程序使用包装函数运行正确，那么我们把每个包装函数的第 一个字母小写并重新编译，也能正确运行。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">包装函数被封装在一个源文件（csapp.c)中，这个文件被编译和链接到每个程序中。一 个独立的头文件(csapp.h)中包含这些包装函数的函数原型。</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">本附录给出了一个关于Unix系统中不同种类的错误处理的教程</span>
+</tt>
+ <span class="calibre2">
+<tt class="calibre3">
+<span class="calibre4">，</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">还给出了不同风格的错误 处理包装函数的示例。csapp • h和csapp • c文件可以从CS:APP网站上获得。</span>
+</tt>
+</p>
+<span id="filepos0006861699"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">A.1 Unix</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">系统中的错误处理</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">本书中我们遇到的系统级函数调用使用三种不同风格的返回错误：Unix风格的、Posix风格 的和DNS风格的。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Unix风格的错误处理</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">像fork和wait这样Unix早期开发出来的函数（以及一些较老的Posix函数）的函数返回 值既包括错误代码，也包括有用的结果。例如，当Unix风格的wait函数遇到一个错误（例如 没有子进程要回收)，它就返回-1,并将全局变量errno设置为指明错误原因的错误代码。如 果wait成功完成，那么它就返回有用的结果，也就是回收的子进程的PID。Unix风格的错误处 理代码通常具有以下形式：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((pid = wait(NULL)) &lt; 0) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "wait error: %s\n", strerror(errno));</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(0)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">strerror函数返回某个errno值的文本描述。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Posix风格的错误处理</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">许多较新的Posix函数，例如Pthread函数，只用返回值来表明成功（0)或者失败（非0)。 任何有用的结果都返回在通过引用传递进来的函数参数中。我们称这种方法为Posix风格的错误 处理。例如，Posix风格的<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">P</span>
+</tt>
+</small>
+</sub>
+ thread_<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">Cr</span>
+</tt>
+</small>
+</sub>
+ eat<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">e</span>
+</tt>
+</small>
+</sub>
+ 函数用它的返回值来表明成功或者失败，而通过</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">引用将新创建的线程的ID (有用的结果）返回放在它的第一个参数中。Posix风格的错误处理代 码通常具有以下形式：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((retcode = pthread_create(fetid, NULL, thread, NULL)) != 0) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "pthread_create error: %s\n",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">strerror(retcode));</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">exit(0);</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">DNS风格的错误处理</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">gethostbyname和gethostbyaddr函数检索DNS (域名系统）主机条目，它们有另外 一种返回错误的方法。这些函数在失败时返回NULL指针，并设置全局变量11_^二11<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">0</span>
+</tt>
+</small>
+</sub>
+ 。DNS风 格的错误处理通常具有以下形式：</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((p = gethostbyname(name)) == NULL) {</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf (stderr, "gethostbyname error: °/<sub class="calibre24">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">0</span>
+</b>
+</tt>
+</span>
+</small>
+</sub>
+ s\n:",</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">hstrerror(h_errno));</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">exit(0);</span>
+</b>
+</span>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">4.错误报告函数小结</span>
+</tt>
+</p>
+<p height="0pt" width="2em" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">贯穿本书，我们使用下列错误报告函数来包容不同的错误处理风格</span>
+</tt>
+</p>
+<table valign="top" class="calibre19">
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">#include "csapp.h"</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void unix_error(char <sup class="calibre23"><span id="filepos0006866884"></span>
+ <small class="calibre8">
+<a href="part0029.html#filepos0006960079">
+<span class="calibre18">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">20</span>
+</b>
+</tt>
+</span>
+</a>
+</small>
+</sup>
+ msg);</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void posix_error(int code, char *msg);</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void dns_error(char *msg); •</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void app_error(char *msg);</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+</tr>
+<tr valign="top" class="calibre20">
+<td class="calibre21"><br class="calibre9"/>
+<br class="calibre9"/>
+</td>
+<td class="calibre21">
+<blockquote height="0pt" width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">返回：无。</span>
+</b>
+</tt>
+</span>
+</blockquote>
+</td>
+</tr>
+</table>
+<p height="0pt" width="2em" id="3NQJ-96d925d398a443b8b8af221b0d2c48c5" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">正如它们的名字表明的那样，unix_error、posix_error和dns一error函数报告Unix 风格的错误、Posix风格的错误和DNS风^的错误，然后终It。包括app—error函数是为了方便 报告应用错误。它只是简单地打印它的输入，然后终止。图A-1展示了这些错误报告函数的代码。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(O);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void app_error(char *msg)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">/* Application error */</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<b class="calibre13">
+<span class="calibre4">{</span>
+</b>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">fprintf(stderr, "%s\n", msg);</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">exit(0)</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">图</span>
+</tt>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">A-l (</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">续）</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pid_t Wait(int *status)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pid_t pid;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((pid 二</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">wait(status)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">nnix_error("Wait error");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">return pid;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">&gt;</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">            </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">A-2 Unix</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">风格的</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">wait</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数的包装函数</span>
+</b>
+</tt>
+</p>
+<span id="filepos0006871415"></span>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<b class="calibre13">
+<span class="calibre4">A.2</span>
+</b>
+</span>
+ <span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">错误处理包装函数</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">下面是一些不同错误处理包装函数的示例：</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">•</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Unix</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">风格的错误处理包装函数。</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">图A-2展示了 Unix风格的wait函数的包装函数。如 果wait返回一个错误，包装函数打印一条消息，然后退出。否则，它向调用者返回一 个PID。图A-3展示了 Unix风格的kill函数的包装函数。注意，这个函数和wait不 同，成功时返回void。</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">                              </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">void Kill(pid_t pid, int signum)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">{</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre2">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">int rc;</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">4</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((rc = kill(pid, signum)) &lt; 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">unix_error("Kill error");</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">}</span>
+</tt>
+</p>
+<p height="0pt" width="3em" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">            </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/csapp.c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">图</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">A-3 Unix</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">风格的</span>
+</b>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">kill</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">函数的包装函数</span>
+</b>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Posix</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">风格的错误处理包装</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">函数。</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">图</span>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">A-4展示了 Posix风格的pthread_detach函数的包 装函数。同大多数Posix风格的函数一样，它的错误返回码中不会包含<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</small>
+</sup>
+ 有用的结果，所以 成功时，包装函数返回void。</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">—<sup class="calibre23">
+<small class="calibre8">
+<span class="calibre18">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">code/src/cscip p. c</span>
+</b>
+</i>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">void Pthread_detach</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">(pthread.t</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">tid)</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">{</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">int rc;</span>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">3</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">if ((rc</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">= pthread.detach(tid)</span>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">) != 0)</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">posix_error(rc，"Pthread_detacli error'<sup class="calibre23">
+<small class="calibre8">
+<sup class="calibre33"><span id="filepos0006875819"></span>
+ <small class="calibre34">
+<a href="part0029.html#filepos0006962008">
+<span class="calibre38">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">21</span>
+</b>
+</tt>
+</span>
+</a>
+</small>
+</sup>
+</small>
+</sup>
+ )；</span>
+</b>
+</tt>
+</span>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<span class="calibre11">
+<tt class="calibre3">
+<span class="calibre4">参考文献</span>
+</tt>
+</span>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Advanced Micro Devices, Inc.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Software Optimization Guide for AMD64 Processors,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2005. Publication Number 25112.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Advanced Micro Devices, Inc.</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">AMD64 Architecture Programmer’s Manual, Volume 1:</span>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Application Programming</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">，</span>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">2007. Publication</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">Number 24592.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Advanced Micro Devices, Inc.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">AMD64 Architecture Programmer’s Manual, Volume 3:</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">General-Purpose and System Instructions,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2007. Publication Number 24594.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">K. Arnold, J. Gosling, and D. Holmes.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">The</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Java Programming Language, Fourth Edition.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Prentice Hall, 2005.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">V. Bala, E. Duesterwald，and S. Banerjiia. Dynamo: A transparent dynamic optimization system. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the 1995 ACM</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Conference on Programming Language Design</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">and Implementation (PLDI),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 1-12, June</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2000</span>
+</b>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+</span>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">T. Bemers-Lee, R. Fielding, and H. Frystyk.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">„</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">Hypertext transfer protocol - HTTP/1.0. RFC</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1945,1996.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">A. Birrell. An introduction to programming with threads. Technical Report 35, Digital Systems Research Center, 1989.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">A. Birrell, M. Isard, C. Thacker, and T. Wobber. A design for high-performance flash disks.</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">SIGOPS Operating Systems Review,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">41(2</span>
+</tt>
+ <tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">)，</span>
+</b>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">2007.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">R. Blum.</span>
+</b>
+</i>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Professional Assembly Language.</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">Wiley, 2005.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. Borkar. Thousand core chips—a technology perspective. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Design Automation Conference,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 746-749. ACM, 2007.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D. Bovet and M. Cesati.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Understanding the</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Linux Kernel, Third Edition.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">O’Reilly Media, Inc, 2005.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">A. Demke Brown and T. Mowry. Taming the memory hogs: Using compiler-inserted releases</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">to manage physical memory intelligently. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Proceedings of the Fourth Symposium on Operating Systems Design and Implementation</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(OSDI),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 31-44, October 2000.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R. E. Bryant. Term-level verification of a pipelined CISC microprocessor. Technical Report CMU-CS-05-195, Carnegie Mellon University, School of Computer Science, 2005.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R. E. Bryant and D. R. O’Hallaron. Introducing computer systems from a programmer’s</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">perspective. In</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the Technical</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<span class="calibre4">Symposium on Computer Science Education (SIGCSE).</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, February 2001.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. R. Buck and J. K. Hollingsworth. An API for runtime code patching.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Journal of</span>
+</b>
+</i>
+</blockquote>
+</blockquote>
+<p height="0pt" width="-18pt" class="calibre1">
+<i class="calibre15">
+<span class="calibre4">^ High Performance Computing Applications,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">14(4):317-324, June 2000.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D. Butenhof.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Programming with Posix Threads.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Addison-Wesley, 1997.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. Carson and P. Reynolds. The geometry of semaphore programs.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">ACM Transactions on</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Programming Languages and Systems,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">9(1):25- 53，1987.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">J. B. Carter, W. C. Hsieh, L. B. Stoller, M. R. Swanson, L. Zhang, E. L. Brunvand, A. Davis,</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">-C. Kuo, R. Kuramkote, M. A. Parker，</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">L. Schaelicke, and T. Tateyama. Impulse: Building a smarter memory controller. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the Fifth International Symposium on High Performance Computer Architecture</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(HPCA),</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">pages 70-79，January 1999.</span>
+</b>
+</tt>
+</span>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. Chellappa, F. Franchetti, and M. Ptischel. How to write fast numerical code: A small introduction. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Generative and Transformational Techniques in Software Engineering II,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">volume 5235，pages 196-259. Springer-Verlag Lecture Notes in Computer Science, 2008.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">P. Chen, E. Lee, G. Gibson, R. Katz, and D. Patterson. RAID: High-performance, reliable secondary storage.</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">ACM Computing Surveys,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">26(2), June 1994.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. Chen, P. Gibbons, and T. Mowry. Improving index performance through prefetching. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Proceedings of the 2001 ACM SIGMOD Conference.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, May 2001.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">T. Chilimbi, M. Hill, and J. Larus. Cacheconscious structure layout. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">the 1999 ACM Conference on Programming Language Design and Implementation (PJLDI</span>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">)，</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">pages 1-12. ACM, May 1999.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. Cmelik and D. Keppel. Shade: A fast instruction-set simulator for execution profiling. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the 1994 ACM SIG-</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">METRICS Conference on Measurement and</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Modeling of Computer Systems,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 128-137, May 1994.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">E. Coffman, M. Elphick, and A. Shoshani. System deadlocks.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">ACM Computing Surveys,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">3(2):67-78，June 1971.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D. Cohen. On holy wars and a plea for peace.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Computer,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">14(10):48-54, October 1981.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel 64 and IA-32 Architectures Optimization Reference Manual,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2009. Order Number 248966.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel 64 and IA-32 Architectures Software Developer’s Manual, Volume 1: Basic Architecture,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2009. Order Number 253665.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel 64 and IA-32 Architectures Software Developer’s Manual，Volume 2: Instruction Set Reference A-M,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2009. Order Number 253667.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 2:</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Instruction Set Reference</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">iV-Z, 2009. Order Number 253668.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3a: System Programming Guide, Parti,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">2009. Order Number 253669.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">P. J. Courtois, F. Heymans, and D. L. Paraas. Concurrent control with “readers” and “writers.”</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Commun. ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">14(10):667-668,1971.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">C. Cowan, P. Wagle, C. Pu, S. Beattie, and J. Walpole. Buffer overflows: Attacks and defenses for the vulnerability of the decade. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">DARPA Information Survivability Conference</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">and Expo (DISCEX),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">March 2000.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">J. H. Crawford. The i486 CPU: Executing instructions in one clock cycle.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Micro,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">10(1):27-36, February 1990.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">V. Cuppu, B. Jacob, B. Davis, and T. Mudge. A performance comparison of contemporary DRAM architectures. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Twenty-Sixth International Symposium on</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Computer Architecture (ISCA),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Atlanta, GA, May 1999. IEEE.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. Davis, B. Jacob, and T. Mudge. The new DRAM interfaces: SDRAM, RDRAM, and variants. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Proceedings of the Third International Symposium on High Performance</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Computing (ISHPC),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Tokyo, Japan, October</span>
+</tt>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">2000</span>
+</b>
+</span>
+ <span class="calibre2">
+<b class="calibre13">
+<span class="calibre4">.</span>
+</b>
+</span>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">E. Demaine. Cache-oblivious algorithms and data structures. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Lecture Notes in Computer Science.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Springer-Verlag，2002.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">E. W. Dijkstra. Cooperating sequential processes. Technical Report EWD-123, Technological University, Eindhoven, The Netherlands, 1965.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">C. Ding and K. Kennedy. Improving cache performance of dynamic applications through data and computation reorganizations at run time. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the 1999 ACM Conference on Programming Language Design and Implementation (PLDI),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 229-241. ACM, May 1999.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">M. Dowson. The Ariane 5 software failure.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SIG-</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">SOFT Software Engineering Notes,</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">22(2):84, 1997.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">M. W. Eichen and J. A. Rochlis. With microscope and tweezers: An analysis of the Internet virus of November, 1988. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Symposium on Research in Security and Privacy,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">1989.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">,</span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">      </span>
+</b>
+</span>
+ <span class="calibre12">
+<b class="calibre13">
+<span class="calibre4">R. Fielding, J. Gettys, J. Mogul, H. Frystyk,</span>
+</b>
+</span>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">L. Masinter, P. Leach, and T. Beraers-Lee. Hypertext transfer protocol _ HTTP/1.1. RFC 2616,1999.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">M. Frigo, C. E. Leiserson, H. Prokop, and</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">S. Ramachandran. Cache-oblivious algorithms. In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Proceedings of the 40th IEEE Symposium on Foundations of Computer Science (FOCS '99),</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 285-297. IEEE, August 1999.</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[43】M. Frigo and V. Strumpen. The cache complexity of multithreaded cache oblivious algorithms.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">SPAA <sup class="calibre7">
+<small class="calibre8">
+<span class="calibre18">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">}</span>
+</b>
+</i>
+</span>
+</small>
+</sup>
+</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">06: Proceedings</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">of the</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Eighteenth</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<span class="calibre4">Annual ACM Symposium on Parallelism in</span>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Algorithms and Architectures,</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">pages 271-280, New York, NY, USA, 2006. ACM.</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[44] G. Gibson, D. Nagle, K. Amiri, J. Butler,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Chang, H. Gobioff, C. Hardin, E. Riedel,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Rochberg, and J. Zelenka. A cost-effective, high-bandwidth storage architecture.</span>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">In Proceedings of the International Conference on</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<span class="calibre4">Architectural Support for Programming Languages and Operating Systems (ASPLOS).</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, October 1998.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Gibson and R. Van Meter. Network attached storage architecture.</span>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">43(11)，November 2000.</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[46] J. Gustafson. Reevaluating Amdahl^ law.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">31(5), August 1988.</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[47</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">L. Gwennap. New algorithm improves branch</span>
+</tt>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">prediction.</span>
+</b>
+</tt>
+</span>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Microprocessor Report^</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">9(4)，March</span>
+</b>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">1995.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">S. P. Harbison and G. L. Steele, Jr.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">C, A</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Reference Manual, Fifth Edition.</span>
+</b>
+</i>
+</span>
+ <span class="calibre12">
+<tt class="calibre3">
+<b class="calibre13">
+<span class="calibre4">Prentice Hall,</span>
+</b>
+</tt>
+</span>
+ <b class="calibre13">
+<span class="calibre4">2002</span>
+</b>
+ <tt class="calibre3">
+<span class="calibre4">.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. L. Hennessy and D. A. Patterson.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Computer</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Architecture: A Quantitative Approach, Fourth</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Edition.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Morgan Kaufmann, 2007.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[51</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">M. Herlihy and N. Shavit.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">The Art of Multiprocessor Programming.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Morgan Kau£mann, 2008.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">A. R. Hoare. Monitors: An operating system structuring concept.</span>
+</tt>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the</span>
+</b>
+</i>
+</span>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">17(10):549-557，October 1974.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[53</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Intel Corporation.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Tool Interface Standards</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Portable Formats Specification, Version 1.1’</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">1993. Order Number 241597.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">[54</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">F. Jones, B. Prince, R. Norwood, J. Hartigan, W. Vogley, C. Hart, and D. Bondurant. A new era of fast dynamic RAMs.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Spectrum,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 43-39, October 1992.</span>
+</tt>
+</p>
+<p height="0pt" width="-18pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">R. Jones and R. Lins.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Garbage Collection:</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Algorithms for Automatic Dynamic Memory</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Management.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Wley, 1996.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">M. Kaashoek, D. Engler, G. Ganger, H. Briceo， R. Hunt, D. Maziers, T. Pinckney, R. Grimm,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Jannotti, and K. MacKenzie. Application per- fonnance and flexibility on Exokemel systems.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">In</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Proceedings of the Sixteenth Symposium on</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Operating System Principles (SOSP),</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">October 1997.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">R. Katz and G. Bordello.</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">Contemporary Logic</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Design, Second Edition.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Prentice Hall, 2005.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. Kernighan and D. Ritchie.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">The C Programming Language，First Edition.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Prentice Hall, 1978.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. Kernighan and D. Ritchie.</span>
+</tt>
+ <i class="calibre15">
+<span class="calibre4">The C Programming Language, Second Edition.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Prentice Hall, 1988.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">B. W. Kernighan and R. Pike.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">The Practice of Programming.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Addison-Wesley, 1999.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">T. Kilbura, B. Edwards, M. Lanigan, and F. Sumner. One-level storage system.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IRE Transactions on Electronic Computers</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">，</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">EC- 11:223-235, April 1962.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">D. Knuth.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">The Art of Computer Programming,</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Volume 1: Fundamental Algorithms, Second</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Edition.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Addison-Wesley, 1973.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">J. Kurose and K. Ross.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Computer Networking: A</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Top-Down Approach, Fifth Edition.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Addison- Wesley, 2009.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">M. Lam, E. Rothberg, and M. Wolf. The cache performance and optimizations of blocked algorithms. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the International</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Conference on Architectural Support for Programming Languages and Operating Systems</span>
+</i>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">(ASPLOS).</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, April 1991,</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">J. R. Larus and E. Schnarr. EEL: Machine- independent executable editing,</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">la Proceedings</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">of the 1995 ACM Conference on Programming Language Design and Implementation (PLDI</span>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">)，</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">June 1995.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">C. E. Leiserson and J. B. Saxe. Retiming synchronous circuitry.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Algorithmica</span>
+</b>
+</i>
+ <span class="calibre12">
+<tt class="calibre3">
+<i class="calibre15">
+<span class="calibre4">，</span>
+</i>
+</tt>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">6(1-6), June 1991.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">J. R. Levine.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Linkers and Loaders.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Morgan Kaufmann, San Francisco, 1999.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">C. Lin and L. Snyder.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Principles of Parallel</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">Programming.</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Addison-Wesley, 2008.</span>
+</tt>
+</blockquote>
+</blockquote>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">Y. Lin and D. Padim. Compiler analysis of irregular memory accesses. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of</span>
+</b>
+</i>
+ <i class="calibre15">
+<span class="calibre4">the 2000 ACM Conference on Programming Language Design and Implementation (PLDI),</span>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">pages 157-168. ACM, June 2000.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. L. Lions. Ariane</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">5</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Flight 501 failure. Technical</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[83]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">report, European Space Agency, July 1996.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. Macguire.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Writing Solid Code,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Microsoft Press, 1993.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">S. A. Mahlke, W. Y. Chen, J. C. Gyllenhal, and</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">84</span>
+</tt>
+</small>
+</sup>
+ ]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">W. W. Hwu. Compiler code transformations for superscalar-based high-performance systems.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Supercomputing.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, 1992.</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[85]</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">E. Marshall. Fatal error: How Patriot overlooked a Scud.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Science,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">page 1347，March 13,</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">1992.</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[<sup class="calibre7">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">86</span>
+</tt>
+</small>
+</sup>
+ ]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">M. Matz, J. Hubicka, A. Jaeger, and M. Mitchell.</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">rg<sub class="calibre17">
+<small class="calibre8">
+<tt class="calibre3">
+<span class="calibre4">7</span>
+</tt>
+</small>
+</sub>
+ ^</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">System V application binary interface AMD64 architecture processor supplement. Technical report, AMD64.org, 2009,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Morris, M. Satyanarayanan, M. Conner,</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">jggj</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Howard, D. Rosenthal, and F. Smith. Andrew:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">A distributed personal computing environment.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">March 1986.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">T. Mowry, M. Lam, and A. Gupta. Design</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[89]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">and evaluation of a compiler algorithm for prefetching. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the International Conference on Architectural Support for Pro-</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">rg^i</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">gramming Languages and Operating Systems (ASPLOS).</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, October 1992.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">S. S. Muchnick.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Advanced Compiler Design and Implementation.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Morgan Kaufmann, 1997.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">S. Nath and P. Gibbons. Online maintenance of</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">very large random samples on flash storage. In</span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">      </span>
+</tt>
+ <tt class="calibre3">
+<span class="calibre4">[91]</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings ofVLDBW.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">ACM, August 2008.</span>
+</tt>
+</p>
+<blockquote height="0pt" class="calibre26">
+<blockquote width="0pt" class="calibre22">
+<tt class="calibre3">
+<span class="calibre4">M. Overton.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Numerical Computing with IEEE Floating Point Arithmetic.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">SIAM, 2001.</span>
+</tt>
+</blockquote>
+</blockquote>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">W. Pugh. The Omega test: A fast and practical integer programming algorithm for dependence analysis.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">35(8):102-114, August 1992.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">W. Pugh. Fixing the Java memory model. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the Java Grande Conference,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">June 1999.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Rabaey, A. Chandrakasan, and B. Nikolic.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Digital Integrated Circuits: A Design Perspective, Second Edition.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Prentice Hall, 2003.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Reinders.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Intel Threading Building Blocks.</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">O’Reilly，2007.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Ritchie. The evolution of the Unix timesharing system.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">AT&amp;T Bell Laboratories Technical Journal,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">63(6 Part 2):1577-1593, October 1984.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Ritchie. The development of the C language. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the Second History of Programming Languages</span>
+</b>
+</i>
+ <span class="calibre12">
+<i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Conference,</span>
+</b>
+</i>
+</span>
+ <tt class="calibre3">
+<span class="calibre4">Cambridge, MA, April 1993.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">Ritchie and K. Thompson. The Unix timesharing system.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Communications of the ACM,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">17(7):365-367, July 1974.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">T. Romer, G. Voelker, D. Lee, A. Wolman,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">W. Wong, H. Levy, B. Bershad, and B. Chen. Instrumentation and optimization of Win32/Intel executables using Etch. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the USENIX Windows NT Workshop,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">Seattle, Washington, August 1997.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">M. Satyanarayanan, J. Kistler，P. Kumar,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">M. Okasaki, E. Siegel, and D. Steere. Coda:</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">A highly available file system for a distributed workstation environment.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Transactions on Computers,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">39(4):447-459, April 1990.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">J. Schindler and G. Ganger. Automated disk drive characterization. Technical Report CMU- CS-99-176, School of Computer Science, Carnegie Mellon University, 1999.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">F. B. Schneider and K. P. Birman. The monoculture risk put into context.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">IEEE Security and Privacy,</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">7(1), January 2009.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">R. C. Seacord.</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Secure Coding in C and</span>
+</b>
+</i>
+ <tt class="calibre3">
+<span class="calibre4">C++. Addison-Wesley, 2006.</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">H. Shacham, M. Page, B. Pfaff, E.-J. Goh,</span>
+</tt>
+</p>
+<p height="0pt" width="0pt" class="calibre1">
+<tt class="calibre3">
+<span class="calibre4">N. Modadugu, and D. Boneh. On the effectiveness of address-space randomization. In</span>
+</tt>
+ <i class="calibre15">
+<b class="calibre13">
+<span class="calibre4">Proceedings of the 11th ACM Conference on</span>
+</b>
+</i>
+</p>
+</body>
+</html>
